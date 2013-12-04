@@ -1,3 +1,7 @@
+<?php 
+require 'inc/init.php';
+
+?>
 <!DOCTYPE html>
 <html>
     <head>

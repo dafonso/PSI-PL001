@@ -1,3 +1,7 @@
+<?php 
+require 'inc/init.php';
+
+?>
 <!DOCTYPE html>
 <html>
     <head>
@@ -13,11 +17,7 @@
                 <div class="span12">
                     <h1>ShopCUL - Finalizar Compra</h1>            
                 </div>
-                <ul class="nav nav-pills pull-right">
-                    <li>
-                        <a href="#">Login</a>
-                    </li>
-                </ul>
+                <?php require 'inc/common/nav.php'; ?>
             </div>
             <div class="row">
                 <div class="pull-right">

@@ -1,6 +1,10 @@
 <?php 
 require 'inc/init.php';
 
+if($userLoggedIn) {
+	header('Location: /');
+	exit;
+}
 ?>
 <!DOCTYPE html>
 <html>
