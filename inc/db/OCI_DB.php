@@ -288,6 +288,9 @@ class OCI_DB {
 	 * @param Product $address
 	 */
 	public function insertProduct(Product $product) {
+		$insertProductSQL = "";
+		
+		
 	
 	}
 	
