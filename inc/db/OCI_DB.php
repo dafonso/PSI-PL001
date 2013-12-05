@@ -3,8 +3,7 @@ class OCI_DB {
 	private $db;
 	private $username = 'psi001pl';
 	private $password = 'Ps1PL001';
-// 	private $connString = '//luna.di.fc.ul.pt/difcul.alunos.di.fc.ul.pt';
-	private $connString = '//localhost';
+	private $connString = ORACLE_CONN_STRING;
 	
 	public function __construct() {
 		$this->db = oci_connect($this->username, $this->password, $this->connString, "utf8") or die("Erro na ligação à BD!");

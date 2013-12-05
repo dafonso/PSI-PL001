@@ -21,11 +21,7 @@ if($userLoggedIn) {
                 <div class="span12" style="height: 100px;">
                     <h1>ShopCUL - Login</h1>            
                 </div>
-                <ul class="nav nav-pills pull-left">
-                    <li>
-                        <a href="index.php">Home</a>
-                    </li>
-                </ul>
+                <?php require 'inc/common/nav.php'; ?>
             </div>
             <div class="row">
                 <form class="form-horizontal" action="index.php" method="post" >

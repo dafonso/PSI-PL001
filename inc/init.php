@@ -2,9 +2,7 @@
 session_name('ShopCUL');
 session_start();
 
-define('REDIRECT_URL_PATH', '/');
-// define('REDIRECT_URL_PATH', /'~psi-pl001/');
-
+require_once 'config.php';
 require 'function-lib.php';
 
 global $db;
