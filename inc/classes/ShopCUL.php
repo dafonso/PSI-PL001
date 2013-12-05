@@ -78,7 +78,6 @@ class ShopCUL {
 		global $db;
 		
 		$customer = new Customer($db->getCustomer($id));
-		
 	
 		return $customer;
 	}

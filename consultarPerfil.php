@@ -7,8 +7,8 @@ if(!$userLoggedIn) {
 }
 
 $customer = ShopCUL::getCustomerByID($_SESSION['user_id']);
-$payoption = ShopCUL::getPayOptionByCustomer($customer);
-$address = ShopCUL::getAddressByCustomer($customer);
+//$payoption = ShopCUL::getPayOptionByCustomer($customer);
+//$address = ShopCUL::getAddressByCustomer($customer);
 
 ?>
 <!DOCTYPE html>
@@ -35,7 +35,7 @@ $address = ShopCUL::getAddressByCustomer($customer);
                             <div class="control-group">
                                 <label class="control-label">Morada</label>                                
                                 <div class="controls">                                    
-                                    <label id="inputAddress" class="control-label" style="text-align: left;">Rua do Norte 1</label>
+                                    <label id="inputAddress" class="control-label" style="text-align: left;"><?=$customer->getAddresses()->getStreet();?></label>
                                 </div>
                             </div>
                             <div class="control-group">
@@ -54,7 +54,7 @@ $address = ShopCUL::getAddressByCustomer($customer);
                                 <div class="control-group">
                                     <label class="control-label">Nº Cartão</label>                                
                                     <div class="controls">                                    
-                                        <label id="inputCardNumber" class="control-label" style="text-align: left;"><?=$payoption->getHiddenCardnr();?></label>
+                                        <label id="inputCardNumber" class="control-label" style="text-align: left;"><?=$customer->getPayoption()->getHiddenCardnr();?></label>
                                     </div>
                                 </div>
                             </div>
@@ -69,7 +69,7 @@ $address = ShopCUL::getAddressByCustomer($customer);
                             <div class="control-group">
                                 <label class="control-label">Código Postal</label>                                
                                 <div class="controls">                                    
-                                    <label id="inputZipcode" class="control-label" style="text-align: left;"><?=$address->getPostalcode();?> <?=$address->getCity();?></label>
+                                    <label id="inputZipcode" class="control-label" style="text-align: left;"><?=$customer->getAddresses()->getPostalcode();?> <?=$customer->getAddresses()->getCity();?></label>
                                 </div>
                             </div>
                             <div class="control-group">
