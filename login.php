@@ -21,20 +21,24 @@ if($userLoggedIn) {
                 <div class="span12" style="height: 100px;">
                     <h1>ShopCUL - Login</h1>            
                 </div>
-                <?php require 'inc/common/nav.php'; ?>
+                <ul class="nav nav-pills pull-left">
+                    <li>
+                        <a href="index.php">Home</a>
+                    </li>
+                </ul>
             </div>
             <div class="row">
                 <form class="form-horizontal" action="index.php" method="post" >
                     <div class="control-group">
                         <label class="control-label" for="inputUsername">Username</label>
                         <div class="controls">
-                            <input type="text" id="inputUsername" name="inputUsername" placeholder="Username">
+                            <input type="text" id="inputUsername" name="inputUsername" placeholder="Username" maxlength="60">
                         </div>
                     </div>
                     <div class="control-group">
                         <label class="control-label" for="inputPassword">Password</label>
                         <div class="controls">
-                            <input type="password" id="inputPassword" name="inputPassword" placeholder="Password">
+                            <input type="password" id="inputPassword" name="inputPassword" placeholder="Password" maxlength="40">
                         </div>
                     </div>
                     <div class="control-group">

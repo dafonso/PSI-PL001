@@ -1,5 +1,5 @@
 <?php
-class TransactionLines {
+class TransactionLine {
 	/**
 	 * @var integer
 	 */

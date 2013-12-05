@@ -8,6 +8,26 @@ class Category {
 	 * @var string
 	 */
 	private $name;
+	
+	public function __construct($id = null) {
+		global $db;
+		
+		if($id != null && is_numeric($id)) {
+			if(!($db instanceof OCI_DB)) {
+				$db = new OCI_DB();
+			}
+			
+			$categoryData = $db->getCategory($id);
+			
+			if(!$categoryData)
+				return false;
+			
+			error_log(print_r($categoryData, true));
+			
+			$this->setId($categoryData['CATEGORY_ID']);
+			$this->setName($categoryData['NAME']);
+		}
+	}
 
 	public function getId() {
 		return $this -> id;

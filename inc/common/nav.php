@@ -11,7 +11,7 @@
 	<ul class="nav nav-pills pull-right">
 		<li><a href="consultarCliente.php">Olá <?=$_SESSION['user_name'];?>
 		</a></li>
-		<li><a href="#">Consultar Compras</a>
+		<li><a href="historicoCompras.php">Consultar Compras</a>
 		</li>
 		<li><a href="?logout=1">Logout</a>
 		</li>

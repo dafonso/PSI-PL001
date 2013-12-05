@@ -113,7 +113,7 @@ class OCI_DB {
 		
 		oci_execute($customerStmt, OCI_COMMIT_ON_SUCCESS);
 		
-		$result = oci_fetch_array($customerStmt, OCI_FETCHSTATEMENT_BY_ROW + OCI_ASSOC);
+		$result = oci_fetch_assoc($customerStmt);
 		
 		if(!$result)
 			return false;
@@ -132,7 +132,7 @@ class OCI_DB {
 		
 		oci_execute($customerStmt, OCI_COMMIT_ON_SUCCESS);
 		
-		$result = oci_fetch_array($customerStmt, OCI_FETCHSTATEMENT_BY_ROW + OCI_ASSOC);
+		$result = oci_fetch_assoc($customerStmt);
 		
 		if(!$result)
 			return false;
@@ -226,7 +226,8 @@ class OCI_DB {
 	
 	}
 	
-	public function getCustomerAddress() {
+	public function getCustomerAddress(Customer $customer) {
+		
 	
 	}
 	
@@ -280,6 +281,7 @@ class OCI_DB {
 	}
 	
 	public function getPayOption($id) {
+		
 	
 	}
 	
@@ -288,10 +290,34 @@ class OCI_DB {
 	 * @param Product $address
 	 */
 	public function insertProduct(Product $product) {
-		$insertProductSQL = "";
+		$insertProductSQL = " INSERT INTO PRODUCT
+					    (
+							SELLPRICE ,
+							NAME ,
+							PRODUCT_ID ,
+							SHOWDATE ,
+							DESCRIPTION ,
+							CATEGORY_CATEGORY_ID ,
+							BUYPRICE ,
+							ENDTIME ,
+							STARTTIME ,
+							CODE
+					    )
+					    VALUES
+					    (
+							:p_SELLPRICE ,
+							:p_NAME ,
+							:p_PRODUCT_ID ,
+							:p_SHOWDATE ,
+							:p_DESCRIPTION ,
+							:p_CATEGORY_CATEGORY_ID ,
+							:p_BUYPRICE ,
+							:p_ENDTIME ,
+							:p_STARTTIME ,
+							:p_CODE
+					    )";
 		
-		
-	
+		$productStmt = oci_parse($this->db, $insertProductSQL);
 	}
 	
 	public function updateProduct(Product $product) {
@@ -302,8 +328,34 @@ class OCI_DB {
 	
 	}
 	
-	public function getProduct() {
+	public function getProduct($id) {
+		$selectProductSQL = "SELECT * FROM PRODUCT WHERE PRODUCT_ID = :p_PRODUCT_ID";
+		
+		$productStmt = oci_parse($this->db, $selectProductSQL);
+		
+		oci_bind_by_name($productStmt, ":p_PRODUCT_ID", $id);
+		
+		if(!oci_execute($productStmt))
+			return false;
+		
+		return oci_fetch_assoc($productStmt);
+	}
 	
+	public function getProductsByCategory(Category $category) {
+		$products = array();
+		
+		$selectProductsSQL = "SELECT * FROM PRODUCT WHERE CATEGORY_CATEGORY_ID = :p_CATEGORY_CATEGORY_ID";
+	
+		$productsStmt = oci_parse($this->db, $selectProductsSQL);
+	
+		oci_bind_by_name($productsStmt, ":p_CATEGORY_CATEGORY_ID", $category->getId());
+	
+		if(!oci_execute($productsStmt))
+			return false;
+		
+		oci_fetch_all($productsStmt, $products, 0, -1, OCI_FETCHSTATEMENT_BY_ROW + OCI_ASSOC);
+		
+		return $products;
 	}
 	
 	/**
@@ -322,8 +374,21 @@ class OCI_DB {
 	
 	}
 	
-	public function getImage() {
+	public function getImage($id) {
+		$selectImageSQL = "SELECT * FROM IMAGE WHERE IMAGE_ID = :p_IMAGE_ID";
+		
+		$imageStmt = oci_parse($this->db, $selectImageSQL);
+		
+		oci_bind_by_name($imageStmt, ":p_PRODUCT_ID", $id);
+		
+		if(!oci_execute($imageStmt))
+			return false;
+		
+		return oci_fetch_assoc($imageStmt);
+	}
 	
+	public function getImages(Product $product) {
+		
 	}
 	
 	/**
@@ -362,14 +427,31 @@ class OCI_DB {
 	
 	}
 	
-	public function getCategory() {
-	
+	public function getCategory($id) {
+		$selectCategorySQL = "SELECT * FROM CATEGORY WHERE CATEGORY_ID = :p_CATEGORY_ID";
+		
+		$categoryStmt = oci_parse($this->db, $selectCategorySQL);
+		
+		oci_bind_by_name($categoryStmt, ":p_CATEGORY_ID", $id);
+		
+		if(!oci_execute($categoryStmt))
+			return false;
+		
+		return oci_fetch_assoc($categoryStmt);
 	}
 	
 	public function getCategories() {
 		$categories = array();
 		
-		$selectCategoriesSQL = "SELECT ";
+		$selectCategoriesSQL = "SELECT * FROM CATEGORY";
+		
+		$categoriesStmt = oci_parse($this->db, $selectCategoriesSQL);
+		
+		oci_execute($categoriesStmt);
+			
+		oci_fetch_all($categoriesStmt, $categories, 0, -1, OCI_FETCHSTATEMENT_BY_ROW + OCI_ASSOC);
+		
+		return $categories;
 	}
 	
 	/**
@@ -388,28 +470,53 @@ class OCI_DB {
 	
 	}
 	
-	public function getTransaction() {
+	public function getTransaction($id) {
+		
 	
 	}
 	
 	/**
 	 * 
-	 * @param TransactionLines $address
+	 * @param TransactionLine $transactionLine
 	 */
-	public function insertTransactionLines(TransactionLines $transactionLines) {
+	public function insertTransactionLine(TransactionLine $transactionLine) {
 	
 	}
 	
-	public function updateTransactionLines(TransactionLines $transactionLines) {
+	public function updateTransactionLine(TransactionLine $transactionLine) {
 	
 	}
 	
-	public function deleteTransactionLines(TransactionLines $transactionLines) {
+	public function deleteTransactionLine(TransactionLine $transactionLine) {
 	
+	}
+	
+	public function getTransactionLine($id) {
+		$selectCategorySQL = "SELECT * FROM CATEGORY WHERE CATEGORY_ID = :p_CATEGORY_ID";
+		
+		$categoryStmt = oci_parse($this->db, $selectCategorySQL);
+		
+		oci_bind_by_name($categoryStmt, ":p_CATEGORY_ID", $id);
+		
+		if(!oci_execute($categoryStmt))
+			return false;
+		
+		return oci_fetch_assoc($categoryStmt);
 	}
 	
 	public function getTransactionLines() {
-	
+		$categories = array();
+		
+		$selectCategoriesSQL = "SELECT * FROM CATEGORY";
+		
+		$categoriesStmt = oci_parse($this->db, $selectCategoriesSQL);
+		
+		if(!oci_execute($categoriesStmt))
+			return false;
+		
+		$categories = oci_fetch_all($categoriesStmt, $categories, 0, -1, OCI_FETCHSTATEMENT_BY_ROW + OCI_ASSOC);
+		
+		return $categories;
 	}
 }
 

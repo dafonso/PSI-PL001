@@ -12,6 +12,11 @@ class Transaction {
 	 * @var Customer
 	 */
 	private $customer = null;
+	
+	/**
+	 * @var TransactionLine
+	 */
+	private $transactionLines = null;
 
 	/**
 	 *

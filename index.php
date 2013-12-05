@@ -25,6 +25,14 @@ if (isset($_POST['inputUsername']) && isset($_POST['inputPassword'])) {
 		exit;
 	}
 }
+
+$shopCulHelper = new ShopCUL();
+
+$categories = $shopCulHelper->getCategories();
+
+dump($categories);
+
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -44,18 +52,12 @@ if (isset($_POST['inputUsername']) && isset($_POST['inputPassword'])) {
                 <?php require 'inc/common/nav.php'; ?>
             </div>   
             <div class="row">
+                <?php foreach($categories as $category) { ?>
                 <div class="span4">                    
                     <img src="img/dummy-big.png" alt="">
-                    <h3 style="text-align: center;"><a href="#">Artesanato</a></h3>
+                    <h3 style="text-align: center;"><a href="escolherProdutos.php?category_id=<?=$category->getId();?>"><?=$category->getName();?></a></h3>
                 </div>
-                <div class="span4">                    
-                    <img src="img/dummy-big.png" alt="">
-                    <h3 style="text-align: center;"><a href="#">d</a></h3>
-                </div>
-                <div class="span4">                    
-                    <img src="img/dummy-big.png" alt="">
-                    <h3 style="text-align: center;"><a href="#">Bilhetes</a></h3>
-                </div>
+                <?php } ?>
             </div>
         </div>
         <script src="js/jquery-1.10.2.min.js"></script>

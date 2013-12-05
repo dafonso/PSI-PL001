@@ -35,7 +35,7 @@ require 'inc/init.php';
                             <div class="control-group">
                                 <label class="control-label" for="inputAddress">Morada</label>
                                 <div class="controls">
-                                    <input type="text" id="inputAddress" placeholder="Morada" class="input-xlarge">
+                                    <input type="text" id="inputAddress" placeholder="Morada" class="input-xlarge" maxlength="255">
                                 </div>
                             </div>
                             <div class="control-group">
@@ -57,13 +57,13 @@ require 'inc/init.php';
                                 <div class="control-group">
                                     <label class="control-label" for="inputCardNumber">Nº Cartão</label>
                                     <div class="controls">
-                                        <input type="text" id="inputCardNumber" placeholder="Nº Cartão" class="input-xlarge">
+                                        <input type="text" id="inputCardNumber" placeholder="Nº Cartão" class="input-xlarge" maxlength="16">
                                     </div>
                                 </div>
                                 <div class="control-group">
                                     <label class="control-label" for="inputCS">Codigo de Segurança</label>
                                     <div class="controls">
-                                        <input type="text" id="inputCS" placeholder="Codigo de Segurança" class="input-xlarge">
+                                        <input type="text" id="inputCS" placeholder="Codigo de Segurança" class="input-xlarge" maxlength="3">
                                     </div>
                                 </div>
                             </div>
@@ -83,26 +83,26 @@ require 'inc/init.php';
                             <div class="control-group">
                                 <label class="control-label" for="inputName">Nome</label>
                                 <div class="controls">
-                                    <input type="text" id="inputName" placeholder="Nome" class="input-xlarge" required>
+                                    <input type="text" id="inputName" placeholder="Nome" class="input-xlarge" required maxlength="160">
                                 </div>
                             </div>
                             <div class="control-group">
                                 <label class="control-label" for="inputZipcode1">Código Postal</label>
                                 <div class="controls controls-row">
-                                    <input type="text" id="inputZipcode1" placeholder="Código" class="input-small">
-                                    <input type="text" id="inputZipcode2" placeholder="Localidade" class="input-medium pull-right">
+                                    <input type="text" id="inputZipcode1" placeholder="Código" class="input-small" maxlength="12">
+                                    <input type="text" id="inputZipcode2" placeholder="Localidade" class="input-medium pull-right" maxlength="60">
                                 </div>
                             </div>
                             <div class="control-group">
                                 <label class="control-label" for="inputMovel">Telemovel</label>
                                 <div class="controls">
-                                    <input type="text" id="inputMovel" placeholder="Telemovel" class="input-xlarge" pattern="9(1|2|3|6)\d{7}">
+                                    <input type="text" id="inputMovel" placeholder="Telemovel" class="input-xlarge" pattern="9(1|2|3|6)\d{7}" maxlength="16">
                                 </div>
                             </div>
                             <div class="control-group">
                                 <label class="control-label" for="inputEmail">Email</label>
                                 <div class="controls">
-                                    <input type="email" id="inputEmail" placeholder="Email" class="input-xlarge">
+                                    <input type="email" id="inputEmail" placeholder="Email" class="input-xlarge" maxlength="255">
                                 </div>
                             </div>
                             <div class="control-group">                               

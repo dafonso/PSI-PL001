@@ -99,13 +99,13 @@ MESSAGE;
                             <div class="control-group">
                                 <label class="control-label" for="inputUsername">Username</label>
                                 <div class="controls">
-                                    <input type="text" id="inputUsername" name="inputUsername"  placeholder="Username" required class="input-xlarge">
+                                    <input type="text" id="inputUsername" name="inputUsername"  placeholder="Username" required class="input-xlarge" maxlength="60">
                                 </div>
                             </div>
                             <div class="control-group">
                                 <label class="control-label" for="inputAddress">Morada</label>
                                 <div class="controls">
-                                    <input type="text" id="inputAddress" name="inputAddress"  placeholder="Morada" class="input-xlarge">
+                                    <input type="text" id="inputAddress" name="inputAddress"  placeholder="Morada" class="input-xlarge" maxlength="255">
                                 </div>
                             </div>
                             <div class="control-group">
@@ -127,7 +127,7 @@ MESSAGE;
                                 <div class="control-group">
                                     <label class="control-label" for="inputCardNumber">Nº Cartão</label>
                                     <div class="controls">
-                                        <input type="text" id="inputCardNumber" name="inputCardNumber"  placeholder="Nº Cartão" class="input-xlarge">
+                                        <input type="text" id="inputCardNumber" name="inputCardNumber"  placeholder="Nº Cartão" class="input-xlarge" maxlength="16">
                                     </div>
                                 </div>
                                 <div class="control-group">
@@ -139,7 +139,7 @@ MESSAGE;
                                 <div class="control-group">
                                     <label class="control-label" for="inputCS">Codigo de Segurança</label>
                                     <div class="controls">
-                                        <input type="text" id="inputCS" name="inputCS"  placeholder="123" class="input-small">
+                                        <input type="text" id="inputCS" name="inputCS"  placeholder="123" class="input-small" maxlength="3">
                                     </div>
                                 </div>
                             </div>
@@ -147,7 +147,7 @@ MESSAGE;
                                 <!-- Display the payment button. -->  
                                 <label class="control-label" for="inputPaypalEmail">E-mail PayPal</label>
                                     <div class="controls">
-                                        <input type="text" id="inputPaypalEmail" name="inputPaypalEmail"  placeholder="E-mail PayPal" class="input-xlarge">
+                                        <input type="text" id="inputPaypalEmail" name="inputPaypalEmail"  placeholder="E-mail PayPal" class="input-xlarge" maxlength="255">
                                     </div>
                             </div> 
                         </div>
@@ -155,26 +155,26 @@ MESSAGE;
                             <div class="control-group">
                                 <label class="control-label" for="inputName">Nome</label>
                                 <div class="controls">
-                                    <input type="text" id="inputName" name="inputName"  placeholder="Nome" class="input-xlarge" required>
+                                    <input type="text" id="inputName" name="inputName"  placeholder="Nome" class="input-xlarge" required maxlength="160">
                                 </div>
                             </div>
                             <div class="control-group">
                                 <label class="control-label" for="inputZipcode1">Código Postal</label>
                                 <div class="controls controls-row">
-                                    <input type="text" id="inputZipcode1" name="inputZipcode1"  placeholder="Código" class="input-small">
-                                    <input type="text" id="inputCity" name="inputCity"  placeholder="Localidade" class="input-medium pull-right">
+                                    <input type="text" id="inputZipcode1" name="inputZipcode1"  placeholder="Código" class="input-small" maxlength="12">
+                                    <input type="text" id="inputCity" name="inputCity"  placeholder="Localidade" class="input-medium pull-right" maxlength="60">
                                 </div>
                             </div>
                             <div class="control-group">
                                 <label class="control-label" for="inputMovel">Telemovel</label>
                                 <div class="controls">
-                                    <input type="text" id="inputMovel" name="inputMovel"  placeholder="Telemovel" class="input-xlarge" pattern="9(1|2|3|6)\d{7}">
+                                    <input type="text" id="inputMovel" name="inputMovel"  placeholder="Telemovel" class="input-xlarge" pattern="9(1|2|3|6)\d{7}" maxlength="16">
                                 </div>
                             </div>
                             <div class="control-group">
                                 <label class="control-label" for="inputEmail">Email</label>
                                 <div class="controls">
-                                    <input type="email" id="inputEmail" name="inputEmail" placeholder="Email" class="input-xlarge">
+                                    <input type="email" id="inputEmail" name="inputEmail" placeholder="Email" class="input-xlarge" maxlength="255">
                                 </div>
                             </div>
                             <div class="control-group">                               

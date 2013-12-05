@@ -1,7 +1,7 @@
 <?php 
 require 'inc/init.php';
 
-if($userLoggedIn) {
+if(!$userLoggedIn) {
 	header('Location: /');
 	exit;
 }
