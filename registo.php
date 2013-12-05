@@ -2,7 +2,7 @@
 require 'inc/init.php';
 
 if($userLoggedIn) {
-	header('Location: /');
+	header('Location: '.REDIRECT_URL_PATH);
 	exit;
 }
 
@@ -44,10 +44,7 @@ MESSAGE;
 		$address->setStreet($_POST['inputAddress']);
 		$address->setType(new AddressType(1));
 		
-		if(!$address_id = $db->insertAddress($address)) {
-			$db->rollback();
-			die($db->error());
-		}
+		$address_id = $db->insertAddress($address);
 		
 		$address->setId($address_id);
 		

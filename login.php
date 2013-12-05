@@ -2,7 +2,7 @@
 require 'inc/init.php';
 
 if($userLoggedIn) {
-	header('Location: /');
+	header('Location: '.REDIRECT_URL_PATH);
 	exit;
 } 
 ?>

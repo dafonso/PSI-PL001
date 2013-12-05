@@ -4,7 +4,7 @@ require 'inc/init.php';
 $shopCULHelper = new ShopCUL();
 
 if(!isset($_GET['category_id']) || !is_numeric($_GET['category_id'])) {
-	header('Location: /');
+	header('Location: '.REDIRECT_URL_PATH);
 	exit;
 }
 

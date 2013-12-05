@@ -7,7 +7,7 @@ if (isset($_POST['inputUsername']) && isset($_POST['inputPassword'])) {
 	$customer_id = $db->getCustomerIDByUsername($username);
 	
 	if(!$customer_id) {
-		//header('Location: /?loginFailed=1');
+		header('Location: /?loginFailed=1');
 		exit;
 	}
 	
@@ -18,10 +18,10 @@ if (isset($_POST['inputUsername']) && isset($_POST['inputPassword'])) {
 	if($customer->getPassword() == sha1($password)) {
 		$_SESSION['user_id'] = $customer->getId();
 		$_SESSION['user_name'] = $customer->getName();
-		header('Location: /');
+		header('Location: '.REDIRECT_URL_PATH);
 		exit;
 	} else {
-		header('Location: /?loginFailed=1');
+		header('Location: '.REDIRECT_URL_PATH.'?loginFailed=1');
 		exit;
 	}
 }
@@ -29,9 +29,6 @@ if (isset($_POST['inputUsername']) && isset($_POST['inputPassword'])) {
 $shopCulHelper = new ShopCUL();
 
 $categories = $shopCulHelper->getCategories();
-
-dump($categories);
-
 
 ?>
 <!DOCTYPE html>
