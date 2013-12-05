@@ -40,7 +40,40 @@ class Product {
 	 * @var Category
 	 */
 	private $category;
+	
+	/**
+	 * 
+	 * @var ArrayObject<Image>
+	 */
+	private $images;
 
+ 	public function __construct($productData = null) {
+ 		global $db;
+ 		if($productData != null) {
+  			$this->setId($productData['PRODUCT_ID']);
+ 			$this->setBuyprice($productData['BUYPRICE']);
+ 			$this->setSellprice($productData['SELLPRICE']);
+ 			$this->setCode($productData['CODE']);
+ 			$this->setDescription($productData['DESCRIPTION']);
+ 			$this->setShowdate($productData['SHOWDATE']);
+ 			$this->setStarttime($productData['STARTTIME']);
+ 			$this->setEndtime($productData['ENDTIME']);
+ 			$this->setName($productData['NAME']);
+ 				
+ 			$imagesData = $db->getImagesData($this);
+ 				
+ 			$images = array();
+ 			foreach($imagesData as $imageData) {
+ 				array_push($images, new Image($imageData));
+ 			}
+ 				
+ 			$this->setImages($images);
+ 			
+ 			$categoryData = $db->getCategoryData($productData['CATEGORY_CATEGORY_ID']);
+ 			$this->setCategory(new Category($categoryData));	
+ 		}
+ 		
+ 	}
 	/**
 	 *
 	 * @return
@@ -201,5 +234,13 @@ class Product {
 		$this -> category = $category;
 	}
 
+
+	public function getImages() {
+	    return $this->images;
+	}
+
+	public function setImages($images) {
+	    $this->images = $images;
+	}
 }
 ?>

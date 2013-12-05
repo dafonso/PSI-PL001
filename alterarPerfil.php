@@ -1,74 +1,15 @@
 <?php 
 require 'inc/init.php';
 
-if($userLoggedIn) {
+if(!$userLoggedIn) {
 	header('Location: '.REDIRECT_URL_PATH);
 	exit;
-}
-
-$userRegistered = false;
-
-if(isset($_POST['inputUsername'])) {
-	$customer = new Customer(ShopCUL::retrieveCostumerDataFromRequest());
-	
-	$rand = rand(0, 6);
-	$customer_password = substr(sha1(time().'PSIPL001'), 0, 8);
-	
-	$customer->setPassword(sha1($costumer_password));
-	
-	$customer_id = $db->insertCustomer($customer);
-	
-	$message = <<<MESSAGE
-A sua palavra-passe é: $customer_password
-
-ShopCUL
-MESSAGE;
-		
-	mail($_POST['inputEmail'], 'ShopCUL: A sua password', $message);
-	
-	$customer->setId($customer_id);
-
-	if (isset($_POST['inputAddress']) && !empty($_POST['inputAddress'])) {
-		$address = new Address();
-		
-		$address->setCity($_POST['inputCity']);
-		$address->setCountry(new Country(1));
-		$address->setPostalcode($_POST['inputZipcode1']);
-		$address->setStreet($_POST['inputAddress']);
-		$address->setType(new AddressType(1));
-		
-		$address_id = $db->insertAddress($address);
-		
-		$address->setId($address_id);
-		
- 		$customer_address = new CustomerAddress($customer, $address);
-		
-		$db->insertCustomerAddress($customer_address);
-		
-	}
-	
-	if (isset($_POST['inputCardNumber']) && is_numeric($_POST['inputCardNumber'])) {
-		$payoption = new PayOption();
-		
-		$payoption->setCardnr($_POST['inputCardNumber']);
-		$payoption->setExpirydate($_POST['inputExpiryDate']);
-		$payoption->setSecuritycode($_POST['inputCS']);
-		$payoption->setName('Default');
-		$payoption->setCustomer($customer);
-		
-		$payoption_id = $db->insertPayOption($payoption);
-		$payoption->setId($payoption_id);
-	}
-	
-	$db->close();
-	
-	$userRegistered = true;
 }
 ?>
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Registo de Utilizador</title>		
+        <title>Alterar Utilizador</title>
 		<meta http-equiv="content-type" content="text/html; charset=utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <!-- Bootstrap -->
@@ -78,18 +19,18 @@ MESSAGE;
         <div class="container">
             <div class="row">
                 <div class="span12">
-                    <h1>ShopCUL - Registo Cliente</h1>            
+                    <h1>ShopCUL - Alterar Dados Pessoais</h1>            
                 </div>
                 <?php require 'inc/common/nav.php'; ?>
             </div>
             <div class="row">
-                <form id="teste" class="form-horizontal" method="post" action="<?=$_SERVER['PHP_SELF'];?>">
+                <form class="form-horizontal">
                     <div class="controls-row">
                         <div class="span6">
                             <div class="control-group">
-                                <label class="control-label" for="inputUsername">Username</label>
+                                <label class="control-label" for="inputNewPassword">Nova password</label>
                                 <div class="controls">
-                                    <input type="text" id="inputUsername" name="inputUsername"  placeholder="Username" required class="input-xlarge" maxlength="60">
+                                    <input type="password" id="inputNewPassword" placeholder="Nova password" class="input-xlarge" maxlength="40">
                                 </div>
                             </div>
                             <div class="control-group">
@@ -121,38 +62,36 @@ MESSAGE;
                                     </div>
                                 </div>
                                 <div class="control-group">
-                                    <label class="control-label" for="inputExpiryDate">Data de Expiração</label>
-                                    <div class="controls">
-                                        <input type="text" id="inputExpiryDate" name="inputExpiryDate"  placeholder="mm/aa" class="input-small">
-                                    </div>
-                                </div>
-                                <div class="control-group">
                                     <label class="control-label" for="inputCS">Codigo de Segurança</label>
                                     <div class="controls">
-                                        <input type="text" id="inputCS" name="inputCS"  placeholder="123" class="input-small" maxlength="3">
+                                        <input type="text" id="inputCS" name="inputCS"  placeholder="Codigo de Segurança" class="input-xlarge" maxlength="3">
                                     </div>
                                 </div>
                             </div>
-                            <div class="control-group" id="paypalDetails" style="display: none;"> 
+                            <div class="control-group span6 offset2" id="paypalDetails" style="display: none;"> 
                                 <!-- Display the payment button. -->  
-                                <label class="control-label" for="inputPaypalEmail">E-mail PayPal</label>
-                                    <div class="controls">
-                                        <input type="text" id="inputPaypalEmail" name="inputPaypalEmail"  placeholder="E-mail PayPal" class="input-xlarge" maxlength="255">
-                                    </div>
+                                <input type="image" name="submit" src="img/btn_subscribe_LG.gif"  
+                                       alt="PayPal - The safer, easier way to pay online">
                             </div> 
                         </div>
                         <div class="span6">
                             <div class="control-group">
-                                <label class="control-label" for="inputName">Nome</label>
+                                <label class="control-label" for="inputConfirmPassword">Confirmar password</label>
                                 <div class="controls">
-                                    <input type="text" id="inputName" name="inputName"  placeholder="Nome" class="input-xlarge" required maxlength="160">
+                                    <input type="password" id="inputConfirmPassword" placeholder="Confirmar password" class="input-xlarge" maxlength="40">
+                                </div>
+                            </div>
+                            <div class="control-group">
+                                <label class="control-label">Nome</label>                                
+                                <div class="controls">                                    
+                                    <label id="inputName" class="control-label" style="text-align: left;">Maria Silva</label>
                                 </div>
                             </div>
                             <div class="control-group">
                                 <label class="control-label" for="inputZipcode1">Código Postal</label>
                                 <div class="controls controls-row">
                                     <input type="text" id="inputZipcode1" name="inputZipcode1"  placeholder="Código" class="input-small" maxlength="12">
-                                    <input type="text" id="inputCity" name="inputCity"  placeholder="Localidade" class="input-medium pull-right" maxlength="60">
+                                    <input type="text" id="inputZipcode2" name="inputZipcode2"  placeholder="Localidade" class="input-medium pull-right" maxlength="60">
                                 </div>
                             </div>
                             <div class="control-group">
@@ -164,7 +103,7 @@ MESSAGE;
                             <div class="control-group">
                                 <label class="control-label" for="inputEmail">Email</label>
                                 <div class="controls">
-                                    <input type="email" id="inputEmail" name="inputEmail" placeholder="Email" class="input-xlarge" required maxlength="255">
+                                    <input type="email" id="inputEmail" placeholder="Email" class="input-xlarge" maxlength="255">
                                 </div>
                             </div>
                             <div class="control-group">                               
@@ -192,7 +131,6 @@ MESSAGE;
                             <div class="controls">
                                 <button type="submit" class="btn btn-primary">Confirmar</button>
                                 <button class="btn btn-danger">Cancelar</button>
-                                <?=($userRegistered == true ? 'Utilizador Registado' : '');?>
                             </div>
                         </div>
                     </div>

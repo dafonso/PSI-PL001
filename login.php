@@ -21,7 +21,6 @@ if($userLoggedIn) {
                 <div class="span12" style="height: 100px;">
                     <h1>ShopCUL - Login</h1>            
                 </div>
-                <?php require 'inc/common/nav.php'; ?>
             </div>
             <div class="row">
                 <form class="form-horizontal" action="index.php" method="post" >
@@ -43,7 +42,7 @@ if($userLoggedIn) {
                                 <input type="checkbox"> Remember me
                             </label>
                             <button type="submit" class="btn btn-primary">Login</button>
-                            <button class="btn btn-danger">Cancelar</button>
+                            <button class="btn btn-danger" onclick="window.history(-1);">Cancelar</button>
                             <?=(isset($_GET['loginFailed']) ? 'Dados fornecidos incorrectos' : '');?>
                         </div>
                     </div>

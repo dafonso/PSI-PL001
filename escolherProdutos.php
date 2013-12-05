@@ -10,9 +10,9 @@ if(!isset($_GET['category_id']) || !is_numeric($_GET['category_id'])) {
 
 $category_id = $_GET['category_id'];
 
-$category = new Category($category_id);
+$category = ShopCUL::getCategoryById($category_id);
+$products = ShopCUL::getProductsByCategory($category);
 
-$products = $shopCULHelper->getProductsByCategory($category);
 ?>
 <!DOCTYPE html>
 <html>
@@ -40,9 +40,11 @@ $products = $shopCULHelper->getProductsByCategory($category);
             <div class="row">
                 <div class="span12">
                     <ul class="thumbnails">
-                    <?php foreach($products as $product) { ?>
+                    <?php foreach($products as $product) { 
+                    	$images = $product->getImages();
+                   	?>
 	                    <li class="thumbnail span12">
-	                            <img src="img/dummy.png" alt="" class="span2">
+	                            <img src="<?=(count($images) == 0 ? 'img/dummy-big.png' : $images[0]->getSource());?>" alt="" class="span2" style=" width: 140px; height: 140px;">
 	                            <div class="span9"> 
 	                                <div class="caption">
 	                                    <h3><?=$product->getName();?></h3>
@@ -52,7 +54,7 @@ $products = $shopCULHelper->getProductsByCategory($category);
 	                                </div>
 	                            </div>
 	                            <div class="pull-right">
-	                                <a href="#" class="btn btn-small btn-success">Comprar</a>
+	                                <a href="finalizarCompra.php?product_id=<?=$product->getId();?>" class="btn btn-small btn-success">Comprar</a>
 	                            </div>
 	                        </li>
                     <?php } ?>

@@ -9,23 +9,16 @@ class Category {
 	 */
 	private $name;
 	
-	public function __construct($id = null) {
-		global $db;
-		
-		if($id != null && is_numeric($id)) {
-			if(!($db instanceof OCI_DB)) {
-				$db = new OCI_DB();
-			}
-			
-			$categoryData = $db->getCategory($id);
-			
-			if(!$categoryData)
-				return false;
-			
-			error_log(print_r($categoryData, true));
-			
+	/**
+	 * @var string
+	 */
+	private $imagesource;
+	
+	public function __construct($categoryData = null) {
+		if($categoryData != null) {
 			$this->setId($categoryData['CATEGORY_ID']);
 			$this->setName($categoryData['NAME']);
+			$this->setImagesource($categoryData['IMAGESOURCE']);
 		}
 	}
 
@@ -45,5 +38,23 @@ class Category {
 		$this -> name = $name;
 	}
 
+
+	/**
+	 * 
+	 * @return 
+	 */
+	public function getImagesource()
+	{
+	    return $this->imagesource;
+	}
+
+	/**
+	 * 
+	 * @param $imagesource
+	 */
+	public function setImagesource($imagesource)
+	{
+	    $this->imagesource = $imagesource;
+	}
 }
 ?>

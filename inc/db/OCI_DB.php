@@ -121,22 +121,18 @@ class OCI_DB {
 	}
 	
 	
-	public function getCustomerIDByUsername($username) {
+	public function getCustomerByUsername($username) {
 		$result = null;
 		
-		$selectCustomerSQL = "SELECT CUSTOMER_ID FROM CUSTOMER WHERE USERNAME = :p_USERNAME";
+		$selectCustomerSQL = "SELECT * FROM CUSTOMER WHERE USERNAME = :p_USERNAME";
 		$customerStmt = oci_parse($this->db, $selectCustomerSQL);
 		
 		oci_bind_by_name($customerStmt, ":p_USERNAME" , $username);
 		
 		oci_execute($customerStmt, OCI_COMMIT_ON_SUCCESS);
-		
-		$result = oci_fetch_assoc($customerStmt);
-		
-		if(!$result)
-			return false;
 
-		return $result['CUSTOMER_ID'];	
+
+		return oci_fetch_assoc($customerStmt);;	
 	}
 	
 	/**
@@ -386,8 +382,20 @@ class OCI_DB {
 		return oci_fetch_assoc($imageStmt);
 	}
 	
-	public function getImages(Product $product) {
+	public function getImagesData(Product $product) {
+		$images = array();
 		
+		$selectImagesSQL = "SELECT * FROM IMAGE WHERE PRODUCT_PRODUCT_ID = :p_PRODUCT_PRODUCT_ID";
+		
+		$imagesStmt = oci_parse($this->db, $selectImagesSQL);
+		
+		oci_bind_by_name($imagesStmt, ":p_PRODUCT_PRODUCT_ID" , $product->getId());
+		
+		oci_execute($imagesStmt);
+			
+		oci_fetch_all($imagesStmt, $images, 0, -1, OCI_FETCHSTATEMENT_BY_ROW + OCI_ASSOC);
+		
+		return $images;
 	}
 	
 	/**

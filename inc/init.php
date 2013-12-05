@@ -23,7 +23,7 @@ $userLoggedIn = false;
 $loginFailed = false;
 
 if(isset($_SESSION['user_id']) && is_numeric($_SESSION['user_id'])) {
-	$customer = new Customer($_SESSION['user_id']);
+	$customer = new Customer(ShopCUL::getCustomerDataByID($_SESSION['user_id']));
 	
 	if(!$customer) {
 		unset($_SESSION['user_id']);

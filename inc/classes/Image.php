@@ -8,10 +8,13 @@ class Image {
 	 * @var string
 	 */
 	private $source;
-	/**
-	 * @var Product
-	 */
-	private $product;
+	
+	public function __construct($imageData = null) {
+		if($imageData != null) {
+			$this->setId($imageData['IMAGE_ID']);
+			$this->setSource($imageData['SOURCE']);
+		}
+	}
 
 	/**
 	 *
@@ -43,22 +46,6 @@ class Image {
 	 */
 	public function setSource($source) {
 		$this -> source = $source;
-	}
-
-	/**
-	 *
-	 * @return
-	 */
-	public function getProduct() {
-		return $this -> product;
-	}
-
-	/**
-	 *
-	 * @param $product
-	 */
-	public function setProduct($product) {
-		$this -> product = $product;
 	}
 
 }

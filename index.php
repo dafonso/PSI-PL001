@@ -4,17 +4,16 @@ require_once 'inc/init.php';
 if (isset($_POST['inputUsername']) && isset($_POST['inputPassword'])) {
 	$username = $_POST['inputUsername'];
 	$password = $_POST['inputPassword'];
-	$customer_id = $db->getCustomerIDByUsername($username);
 	
-	if(!$customer_id) {
-		header('Location: /?loginFailed=1');
+	$customerData = ShopCUL::getCustomerDataByUsername($username);
+	
+	$customer = new Customer($customerData);
+
+	if(!$customer) {
+		header('Location: '.REDIRECT_URL_PATH.'?loginFailed=1');
 		exit;
 	}
-	
-	$customer = new Customer($customer_id);
-	
-	echo $customer->getPassword().' == '.sha1($password);
-	
+
 	if($customer->getPassword() == sha1($password)) {
 		$_SESSION['user_id'] = $customer->getId();
 		$_SESSION['user_name'] = $customer->getName();
@@ -26,10 +25,8 @@ if (isset($_POST['inputUsername']) && isset($_POST['inputPassword'])) {
 	}
 }
 
-$shopCulHelper = new ShopCUL();
 
-$categories = $shopCulHelper->getCategories();
-
+$categories = ShopCUL::getCategories();
 ?>
 <!DOCTYPE html>
 <html>
@@ -51,7 +48,7 @@ $categories = $shopCulHelper->getCategories();
             <div class="row">
                 <?php foreach($categories as $category) { ?>
                 <div class="span4">                    
-                    <img src="img/dummy-big.png" alt="">
+                    <img src="<?=is_null($category->getImagesource()) ? 'img/dummy-big.png' : $category->getImagesource() ;?>" alt="" style=" width: 300px; height: 200px; ">
                     <h3 style="text-align: center;"><a href="escolherProdutos.php?category_id=<?=$category->getId();?>"><?=$category->getName();?></a></h3>
                 </div>
                 <?php } ?>

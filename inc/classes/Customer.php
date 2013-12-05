@@ -43,21 +43,13 @@ class Customer {
 	 */
 	private $username;
 
-	public function __construct($id = null) {
+	public function __construct($customerData = null) {
 		global $db;
 		
-		if($id != null && is_numeric($id)) {
-			if(!($db instanceof OCI_DB)) {
-				$db = new OCI_DB();
-			}
-			
-			$customerData = $db->getCustomer($id);
-			
+		if($customerData != null) {
 			if(!$customerData)
 				return false;
-			
-			error_log(print_r($customerData, true));
-			
+						
 			$this->setId($customerData['CUSTOMER_ID']);
 			$this->setEmail($customerData['EMAIL']);
 			$this->setName($customerData['NAME']);
