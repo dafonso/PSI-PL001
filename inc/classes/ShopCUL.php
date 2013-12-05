@@ -1,7 +1,11 @@
 <?php 
+/**
+ * @author psi-pl001
+ *
+ */
 class ShopCUL {
 	/**
-	 * @return ArrayObject<Category>
+	 * @return array Category
 	 */
 	public static function getCategories() {
 		global $db;
@@ -17,14 +21,12 @@ class ShopCUL {
 	
 	public static function getCategoryById($id) {
 		global $db;
-		
-		$categoryData = $db->getCategoryData($id);
-		
-		return new Category($categoryData);
+
+		return new Category($db->getCategory($id));
 	}
 	
 	/**
-	 * @return ArrayObject<Category>
+	 * @return array Product
 	 */
 	public static function getProductsByCategory(Category $category) {
 		global $db;
@@ -40,38 +42,71 @@ class ShopCUL {
 		return $products;
 	}
 	
-	public static function getCustomerDataByUsername($username) {
+	public static function getAddressByCustomer(Customer $customer) {
 		global $db;
 		
-		return $db->getCustomerByUsername($username);
+		$customerAddress = new CustomerAddress($db->getCustomerAddress($customer));
+		
+		return new Address($db->getAddress($customerAddress->getAddress()));
 	}
 	
-	public static function getCustomerDataByID($id) {
-		global $db;
-	
-		return $db->getCustomer($id);
-	}
-	
-	
-	public static function getProduct($id) {
+	public static function getPayOptionByCustomer(Customer $customer) {
 		global $db;
 		
-		$productData = $db->getProduct($id);
+		return new PayOption($db->getPayOption($customer));
+	}
+	
+	/**
+	 * 
+	 * @param string $username
+	 * @return Customer
+	 */
+	public static function getCustomerByUsername($username) {
+		global $db;
+		
+		$customer = new Customer($db->getCustomerByUsername($username));
+		
+		return $customer;
+	}
+	
+	/**
+	 *
+	 * @param string $id
+	 * @return Customer
+	 */
+	public static function getCustomerByID($id) {
+		global $db;
+		
+		$customer = new Customer($db->getCustomer($id));
+		
+	
+		return $customer;
+	}
+	
+	
+	public static function getProductByID($id) {
+		global $db;
+		
+		$product = new Product($db->getProduct($id));
 
-		return self::retrieveProductObj($productData);
+		return $product;
 	}
 	
 	public static function retrieveCostumerDataFromRequest() {
 		$customerData = array();
 		
-		$customerData['EMAIL'] = (isset($customerData['EMAIL']) ? $_POST['inputEmail'] : null);
-		$customerData['NIF'] = (isset($customerData['NIF']) ? $_POST['inputNIF'] : null);
-		$customerData['PHONENR'] = (isset($customerData['PHONENR']) ? $_POST['inputMovel'] : null);
-		$customerData['NAME'] = (isset($customerData['NAME']) ? $_POST['inputName'] : null);
-		$customerData['USERNAME'] = (isset($customerData['USERNAME']) ? $_POST['inputUsername'] : null);
-		$customerData['PASSWORD'] = (isset($customerData['PASSWORD']) ? $_POST['inputPaypalEmail'] : null);
+		$customerData['CUSTOMER_ID'] = (isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null);
+		$customerData['EMAIL'] = (isset($_POST['inputEmail']) ? $_POST['inputEmail'] : null);
+		$customerData['NIF'] = (isset($_POST['inputNIF']) ? $_POST['inputNIF'] : null);
+		$customerData['PHONENR'] = (isset($_POST['inputMovel']) ? $_POST['inputMovel'] : null);
+		$customerData['NAME'] = (isset($_POST['inputName']) ? $_POST['inputName'] : null);
+		$customerData['USERNAME'] = (isset($_POST['inputUsername']) ? $_POST['inputUsername'] : null);
+		$customerData['PASSWORD'] = (isset($_POST['inputPaypalEmail']) ? $_POST['inputPaypalEmail'] : null);
+		$customerData['PAYPAL'] = (isset($_POST['inputNewPassword']) ? $_POST['inputNewPassword'] : null);
 		
 		return $customerData;
 	}
+	
+	
 }
 ?>

@@ -1,4 +1,8 @@
 <?php 
+/**
+ * @author http://www.urbandictionary.com/define.php?term=kk
+ *
+ */
 class OCI_DB {
 	private $db;
 	private $username = 'psi001pl';
@@ -114,9 +118,6 @@ class OCI_DB {
 		
 		$result = oci_fetch_assoc($customerStmt);
 		
-		if(!$result)
-			return false;
-		
 		return $result;
 	}
 	
@@ -184,8 +185,17 @@ class OCI_DB {
 		
 	}
 	
-	public function getAddress() {
+	public function getAddress($id) {
+		$selectAddressSQL = "SELECT * FROM ADDRESS WHERE ADDRESS_ID = :p_ADDRESS_ID";
 		
+		$addressStmt = oci_parse($this->db, $selectAddressSQL);
+		
+		oci_bind_by_name($addressStmt, ":p_ADDRESS_ID", $id);
+		
+		if(!oci_execute($addressStmt))
+			return false;
+		
+		return oci_fetch_assoc($addressStmt);
 	}
 	
 	/**
@@ -222,8 +232,16 @@ class OCI_DB {
 	}
 	
 	public function getCustomerAddress(Customer $customer) {
+		$selectCustomerAddressSQL = "SELECT * FROM CUSTOMER_ADDRESS WHERE CUSTOMER_CUSTOMER_ID = :p_CUSTOMER_ID";
 		
-	
+		$customerAddressStmt = oci_parse($this->db, $selectCustomerAddressSQL);
+		
+		oci_bind_by_name($customerAddressStmt, ":p_CUSTOMER_ID", $customer->getId());
+		
+		if(!oci_execute($customerAddressStmt))
+			return false;
+		
+		return oci_fetch_assoc($customerAddressStmt);
 	}
 	
 	/**
@@ -232,6 +250,7 @@ class OCI_DB {
 	 */
 	public function insertPayOption(PayOption $payoption) {
 		$id = null;
+		
 		$insertPayOptionSQL = "INSERT INTO PAYOPTION
 							    (
 							      CARDNR ,
@@ -260,7 +279,6 @@ class OCI_DB {
 		oci_bind_by_name($payOptionStmt, ":p_PAYOPTION_ID",	$id);
 		oci_bind_by_name($payOptionStmt, ":p_CUSTOMER_CUSTOMER_ID", $payoption->getCustomer()->getId());
 		
-		
 		if(!$res = oci_execute($payOptionStmt, OCI_COMMIT_ON_SUCCESS))
 			return false;
 		
@@ -275,9 +293,16 @@ class OCI_DB {
 	
 	}
 	
-	public function getPayOption($id) {
+	public function getPayOption(Customer $customer) {
+		$selectPayOptionSQL = "SELECT * FROM PAYOPTION WHERE CUSTOMER_CUSTOMER_ID = :p_CUSTOMER_ID";
 		
-	
+		$payOptionStmt = oci_parse($this->db, $selectPayOptionSQL);
+		
+		oci_bind_by_name($payOptionStmt, ":p_CUSTOMER_ID" , $customer->getId());
+		
+		oci_execute($payOptionStmt);
+					
+		return oci_fetch_assoc($payOptionStmt);
 	}
 	
 	/**
@@ -382,7 +407,7 @@ class OCI_DB {
 		return oci_fetch_assoc($imageStmt);
 	}
 	
-	public function getImagesData(Product $product) {
+	public function getImages(Product $product) {
 		$images = array();
 		
 		$selectImagesSQL = "SELECT * FROM IMAGE WHERE PRODUCT_PRODUCT_ID = :p_PRODUCT_PRODUCT_ID";
@@ -478,7 +503,33 @@ class OCI_DB {
 	}
 	
 	public function getTransaction($id) {
+		$selectTransactionSQL = "SELECT * FROM TRANSACTION WHERE  = :p_TRANSACTION_ID";
 		
+		$transactionStmt = oci_parse($this->db, $selectTransactionSQL);
+		
+		oci_bind_by_name($transactionStmt, ":p_TRANSACTION_ID", $id);
+		
+		if(!oci_execute($transactionStmt))
+			return false;
+		
+		return oci_fetch_assoc($transactionStmt);
+	
+	}
+	
+	public function getTransactionsByCustomer(Customer $customer) {
+		$transactions = array();
+		
+		$selectTransactionsSQL = "SELECT * FROM TRANSACTION WHERE CUSTOMER_CUSTOMER_ID = :p_CUSTOMER_ID";
+		
+		$transactionsStmt = oci_parse($this->db, $selectTransactionsSQL);
+		
+		oci_bind_by_name($transactionsStmt,  ":p_CUSTOMER_ID" , $customer->getId());
+		
+		oci_execute($transactionsStmt);
+			
+		oci_fetch_all($transactionsStmt, $transactions, 0, -1, OCI_FETCHSTATEMENT_BY_ROW + OCI_ASSOC);
+		
+		return $transactions;
 	
 	}
 	
@@ -499,9 +550,9 @@ class OCI_DB {
 	}
 	
 	public function getTransactionLine($id) {
-		$selectCategorySQL = "SELECT * FROM CATEGORY WHERE CATEGORY_ID = :p_CATEGORY_ID";
+		$selectTransactionLineSQL = "SELECT * FROM CATEGORY WHERE CATEGORY_ID = :p_CATEGORY_ID";
 		
-		$categoryStmt = oci_parse($this->db, $selectCategorySQL);
+		$categoryStmt = oci_parse($this->db, $selectTransactionLineSQL);
 		
 		oci_bind_by_name($categoryStmt, ":p_CATEGORY_ID", $id);
 		

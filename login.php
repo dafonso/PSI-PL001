@@ -42,7 +42,7 @@ if($userLoggedIn) {
                                 <input type="checkbox"> Remember me
                             </label>
                             <button type="submit" class="btn btn-primary">Login</button>
-                            <button class="btn btn-danger" onclick="window.history(-1);">Cancelar</button>
+                            <a class="btn btn-danger" onclick="window.history.back()">Cancelar</a>
                             <?=(isset($_GET['loginFailed']) ? 'Dados fornecidos incorrectos' : '');?>
                         </div>
                     </div>

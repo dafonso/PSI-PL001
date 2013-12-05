@@ -1,4 +1,8 @@
 <?php
+/**
+ * @author psi-pl001
+ *
+ */
 class TransactionLine {
 	/**
 	 * @var integer

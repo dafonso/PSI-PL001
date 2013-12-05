@@ -116,7 +116,7 @@ if(!$userLoggedIn) {
                     </ul>
                 </div>
             </div>
-            <div class="row">
+            <!-- <div class="row">
                 <div class="span4 offset4">
                     <div class="pagination">
                         <ul>
@@ -130,7 +130,7 @@ if(!$userLoggedIn) {
                         </ul>
                     </div>
                 </div>
-            </div>
+            </div> -->
         </div>
         <script src="js/jquery-1.10.2.min.js"></script>
         <script src="js/bootstrap.min.js"></script>

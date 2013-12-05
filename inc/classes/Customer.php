@@ -2,7 +2,7 @@
 
 /**
  *
- * @author dafonso
+ * @author psi-pl001
  *
  */
 class Customer {
@@ -42,6 +42,12 @@ class Customer {
 	 * @var string
 	 */
 	private $username;
+	/**
+	 * 
+	 * @var PayOption
+	 */
+	private $payoption;
+
 
 	public function __construct($customerData = null) {
 		global $db;
@@ -58,6 +64,18 @@ class Customer {
 			$this->setPaypal($customerData['PAYPAL']);
 			$this->setPhonenr($customerData['PHONENR']);
 			$this->setUsername($customerData['USERNAME']);
+			
+// 			if($this->getId() != null) {
+// 				$customerAddress = new CustomerAddress($db->getCustomerAddress($this));
+				
+// 				if($customerAddress->getAddress() != null)
+// 					$this->setAddresses($customerAddress->getAddress());
+					
+// 				$this->setPayoption(new PayOption($db->getPayOption($this)));
+// 			}
+		} else {
+			$this->setAddresses(new Address());
+			$this->setPayoption(new PayOption());
 		}
 	}
 
@@ -129,8 +147,18 @@ class Customer {
 	    return $this->addresses;
 	}
 
-	public function setAddresses($addresses) {
+	public function setAddresses(Address $addresses) {
 	    $this->addresses = $addresses;
+	}
+
+	public function getPayoption()
+	{
+	    return $this->payoption;
+	}
+
+	public function setPayoption(PayOption $payoption)
+	{
+	    $this->payoption = $payoption;
 	}
 }
 ?>

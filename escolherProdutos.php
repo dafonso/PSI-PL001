@@ -12,6 +12,11 @@ $category_id = $_GET['category_id'];
 
 $category = ShopCUL::getCategoryById($category_id);
 $products = ShopCUL::getProductsByCategory($category);
+/**
+ * 
+ * @var Product
+ */
+$product = null;
 
 ?>
 <!DOCTYPE html>
@@ -54,14 +59,20 @@ $products = ShopCUL::getProductsByCategory($category);
 	                                </div>
 	                            </div>
 	                            <div class="pull-right">
-	                                <a href="finalizarCompra.php?product_id=<?=$product->getId();?>" class="btn btn-small btn-success">Comprar</a>
+	                                <a href="finalizarCompra.php?product_id=<?=$product->getId();?>" class="btn btn-small btn-success">Comprar</a><br/>
+	                                <?=$product->getSellprice();?> €
+	                                <?php if(!is_null($product->getShowdate())) { ?>
+	                                <br/>
+	                                <?=$product->getShowdate();?><br/>
+	                                <?=$product->getStarttime();?>-<?=$product->getEndtime();?>	
+	                                <?php }?>
 	                            </div>
 	                        </li>
                     <?php } ?>
                     </ul>
                  </div>
             </div>
-            <div class="row">
+            <!-- <div class="row">
                 <div class="span4 offset4">
                     <div class="pagination">
                         <ul>
@@ -75,7 +86,7 @@ $products = ShopCUL::getProductsByCategory($category);
                         </ul>
                     </div>
                 </div>
-            </div>
+            </div>  -->
         </div>
         <script src="js/jquery-1.10.2.min.js"></script>
         <script src="js/bootstrap.min.js"></script>

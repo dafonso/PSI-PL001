@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * @author dafonso
+ * @author psi-pl001
  *
  */
 class AddressType {

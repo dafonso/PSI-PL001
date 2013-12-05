@@ -5,9 +5,7 @@ if (isset($_POST['inputUsername']) && isset($_POST['inputPassword'])) {
 	$username = $_POST['inputUsername'];
 	$password = $_POST['inputPassword'];
 	
-	$customerData = ShopCUL::getCustomerDataByUsername($username);
-	
-	$customer = new Customer($customerData);
+	$customer = ShopCUL::getCustomerByUsername($username);
 
 	if(!$customer) {
 		header('Location: '.REDIRECT_URL_PATH.'?loginFailed=1');
@@ -20,11 +18,10 @@ if (isset($_POST['inputUsername']) && isset($_POST['inputPassword'])) {
 		header('Location: '.REDIRECT_URL_PATH);
 		exit;
 	} else {
-		header('Location: '.REDIRECT_URL_PATH.'?loginFailed=1');
+		header('Location: '.REDIRECT_URL_PATH.'login.php?loginFailed=1');
 		exit;
 	}
 }
-
 
 $categories = ShopCUL::getCategories();
 ?>

@@ -5,6 +5,11 @@ if(!$userLoggedIn) {
 	header('Location: '.REDIRECT_URL_PATH);
 	exit;
 }
+
+$customer = ShopCUL::getCustomerByID($_SESSION['user_id']);
+$payoption = ShopCUL::getPayOptionByCustomer($customer);
+$address = ShopCUL::getAddressByCustomer($customer);
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -36,7 +41,7 @@ if(!$userLoggedIn) {
                             <div class="control-group">
                                 <label class="control-label">Nº Contribuinte</label>                                
                                 <div class="controls">                                    
-                                    <label id="inputNIF" class="control-label" style="text-align: left;">123456789</label>
+                                    <label id="inputNIF" class="control-label" style="text-align: left;"><?=$customer->getNif();?></label>
                                 </div>
                             </div>
                             <div class="control-group">
@@ -49,7 +54,7 @@ if(!$userLoggedIn) {
                                 <div class="control-group">
                                     <label class="control-label">Nº Cartão</label>                                
                                     <div class="controls">                                    
-                                        <label id="inputCardNumber" class="control-label" style="text-align: left;">xxx xxx xxx xxx</label>
+                                        <label id="inputCardNumber" class="control-label" style="text-align: left;"><?=$payoption->getHiddenCardnr();?></label>
                                     </div>
                                 </div>
                             </div>
@@ -58,25 +63,25 @@ if(!$userLoggedIn) {
                             <div class="control-group">
                                 <label class="control-label">Nome</label>                                
                                 <div class="controls">                                    
-                                    <label id="inputName" class="control-label" style="text-align: left;">Maria Silva</label>
+                                    <label id="inputName" class="control-label" style="text-align: left;"><?=$customer->getName();?></label>
                                 </div>
                             </div>
                             <div class="control-group">
                                 <label class="control-label">Código Postal</label>                                
                                 <div class="controls">                                    
-                                    <label id="inputZipcode" class="control-label" style="text-align: left;">1000-100 Lisboa</label>
+                                    <label id="inputZipcode" class="control-label" style="text-align: left;"><?=$address->getPostalcode();?> <?=$address->getCity();?></label>
                                 </div>
                             </div>
                             <div class="control-group">
                                 <label class="control-label">Telemovel</label>                                
                                 <div class="controls">                                    
-                                    <label id="inputMovel" class="control-label" style="text-align: left;">912 345 678</label>
+                                    <label id="inputMovel" class="control-label" style="text-align: left;"><?=$customer->getPhonenr();?></label>
                                 </div>
                             </div>
                             <div class="control-group">
                                 <label class="control-label">Email</label>                                
                                 <div class="controls">                                    
-                                    <label id="inputEmail" class="control-label" style="text-align: left;">maria@fc.ul.pt</label>
+                                    <label id="inputEmail" class="control-label" style="text-align: left;"><?=$customer->getEmail();?></label>
                                 </div>
                             </div>
                             <div class="control-group">                               
@@ -91,7 +96,7 @@ if(!$userLoggedIn) {
                         <div class="control-group span12">
                             <div class="controls">
                                 <button type="submit" class="btn btn-primary">Alterar</button>
-                                <button class="btn btn-danger">Voltar</button>
+                                <a class="btn btn-danger" onclick="window.history.back();">Voltar</a>
                             </div>
                         </div>
                     </div>

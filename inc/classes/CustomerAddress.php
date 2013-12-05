@@ -1,17 +1,26 @@
-<?php 
+<?php
+/**
+ * 
+ * @author psi-pl001
+ *
+ */ 
 class CustomerAddress {
 	/**
-	 * @var Customer
+	 * @var integer
 	 */
 	private $customer;
 	/**
-	 * @var Address
+	 * @var integer
 	 */
 	private $address;
 	
-	public function __construct(Customer $customer, Address $address) {
-		$this->customer = $customer;
-		$this->address = $address;
+	public function __construct($customerAddressData = null) {
+		global $db;
+		
+		if($customerAddressData != null) {
+			$this->setCustomer(new Customer($db->getCustomer($customerAddressData['CUSTOMER_CUSTOMER_ID'])));
+			$this->setAddress(new Address($db->getAddress($customerAddressData['ADDRESS_ADDRESS_ID'])));
+		}
 	}
 
 	/**
@@ -45,7 +54,7 @@ class CustomerAddress {
 	 * 
 	 * @param $address
 	 */
-	public function setAddress(Address $address)
+	public function setAddress($address)
 	{
 	    $this->address = $address;
 	}

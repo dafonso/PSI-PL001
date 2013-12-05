@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * @author dafonso
+ * @author psi-pl001
  *
  */
 class Address {
@@ -29,6 +29,15 @@ class Address {
 	 * @var AddressType
 	 */
 	private $type;
+	
+	public function __construct($addressData = null) {
+		if($addressData != null) {
+			$this->setId($addressData['ADDRESS_ID']);
+			$this->setStreet($addressData['STREET']);
+			$this->setCity($addressData['CITY']);
+			$this->setPostalcode($addressData['POSTALCODE']);
+		}
+	}
 
 	public function getId() {
 		return $this -> id;

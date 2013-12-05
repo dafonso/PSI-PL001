@@ -1,7 +1,7 @@
 <?php
 /**
  * 
- * @author dafonso
+ * @author ps-pl001
  *
  */ 
 class Country {

@@ -1,4 +1,9 @@
 <?php
+/**
+ * 
+ * @author psi-pl001
+ *
+ */
 class Category {
 	/**
 	 * @var integer

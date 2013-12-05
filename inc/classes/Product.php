@@ -1,4 +1,8 @@
 <?php
+/**
+ * @author psi-pl001
+ *
+ */
 class Product {
 	/**
 	 * @var integer
@@ -49,6 +53,7 @@ class Product {
 
  	public function __construct($productData = null) {
  		global $db;
+ 		
  		if($productData != null) {
   			$this->setId($productData['PRODUCT_ID']);
  			$this->setBuyprice($productData['BUYPRICE']);
@@ -60,7 +65,7 @@ class Product {
  			$this->setEndtime($productData['ENDTIME']);
  			$this->setName($productData['NAME']);
  				
- 			$imagesData = $db->getImagesData($this);
+ 			$imagesData = $db->getImages($this);
  				
  			$images = array();
  			foreach($imagesData as $imageData) {
@@ -69,7 +74,7 @@ class Product {
  				
  			$this->setImages($images);
  			
- 			$categoryData = $db->getCategoryData($productData['CATEGORY_CATEGORY_ID']);
+ 			$categoryData = $db->getCategory($productData['CATEGORY_CATEGORY_ID']);
  			$this->setCategory(new Category($categoryData));	
  		}
  		

@@ -1,6 +1,21 @@
 <?php 
 require 'inc/init.php';
 
+if(!isset($_GET['product_id']) || !is_numeric($_GET['product_id'])) {
+	header('Location: '.REDIRECT_URL_PATH);
+	exit;
+}
+
+$product_id = $_GET['product_id'];
+
+$product = ShopCUL::getProductByID($product_id);
+
+if(isset($_SESSION['user_id']) && is_numeric($_SESSION['user_id'])) {
+	$user_id = $_SESSION['user_id'];
+	$customer = ShopCUL::getCustomerByID($user_id);
+} else {
+	$customer = new Customer();
+}
 ?>
 <!DOCTYPE html>
 <html>
@@ -10,6 +25,12 @@ require 'inc/init.php';
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <!-- Bootstrap -->
         <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
+        <script type="text/javascript">
+		function updateTotalPrice() {
+			if($('#inputQuantity').val() > 0)
+				$('#transactionTotal').html(Math.round(($('#sellPrice').val() * $('#inputQuantity').val()) * 100) / 100);
+		}
+        </script>
     </head>
     <body>
         <div class="container">
@@ -21,27 +42,29 @@ require 'inc/init.php';
             </div>
             <div class="row">
                 <div class="pull-right">
-                    <h3>Total: xxxx,xx €</h3>     
+                    <h3>Total: <span id="transactionTotal"><?=$product->getSellprice();?></span> €</h3>     
                 </div>
             </div>
             <div class="row">
                 <form class="form-horizontal">
+                	<input type="hidden" id="sellPrice" name="sellPrice" value="<?=$product->getSellprice();?>">
+                	<input type="hidden" id="product_id" name="product_id" value="<?=$product->getSellprice();?>">
                     <div class="controls-row">
                         <div class="span6">
                             <div class="control-group">
                                 <label class="control-label">Produto:</label>
-                                <label class="control-label">Galo de Barcelos</label>
+                                <label class="control-label"><b><?=$product->getName();?></b></label>
                             </div>
                             <div class="control-group">
                                 <label class="control-label" for="inputAddress">Morada</label>
                                 <div class="controls">
-                                    <input type="text" id="inputAddress" placeholder="Morada" class="input-xlarge" maxlength="255">
+                                    <input type="text" id="inputAddress" placeholder="Morada" class="input-xlarge" maxlength="255" value="<?=$customer->getAddresses()->getStreet();?>">
                                 </div>
                             </div>
                             <div class="control-group">
                                 <label class="control-label" for="inputNIF">Nº Contribuinte</label>
                                 <div class="controls">
-                                    <input type="text" id="inputNIF" placeholder="Nº Contribuinte" class="input-xlarge">
+                                    <input type="text" id="inputNIF" placeholder="Nº Contribuinte" class="input-xlarge" value="<?=$customer->getNif();?>">
                                 </div>
                             </div>
                             <div class="control-group">
@@ -57,52 +80,57 @@ require 'inc/init.php';
                                 <div class="control-group">
                                     <label class="control-label" for="inputCardNumber">Nº Cartão</label>
                                     <div class="controls">
-                                        <input type="text" id="inputCardNumber" placeholder="Nº Cartão" class="input-xlarge" maxlength="16">
+                                    	<input type="hidden" id="payoption_id" name="payoption_id" value="<?=$customer->getPayoption()->getId();?>">
+                                        <input type="text" id="inputCardNumber" name="inputCardNumber"  placeholder="Nº Cartão" class="input-xlarge" maxlength="16" value="<?=$customer->getPayoption()->getCardnr();?>">
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label class="control-label" for="inputExpiryDate">Data de Expiração</label>
+                                    <div class="controls">
+                                        <input type="text" id="inputExpiryDate" name="inputExpiryDate"  placeholder="mm/aa" class="input-small"  value="<?=$customer->getPayoption()->getExpirydate();?>">
                                     </div>
                                 </div>
                                 <div class="control-group">
                                     <label class="control-label" for="inputCS">Codigo de Segurança</label>
                                     <div class="controls">
-                                        <input type="text" id="inputCS" placeholder="Codigo de Segurança" class="input-xlarge" maxlength="3">
+                                        <input type="text" id="inputCS" name="inputCS"  placeholder="123" class="input-small" maxlength="3" value="<?=$customer->getPayoption()->getSecuritycode();?>">
                                     </div>
                                 </div>
                             </div>
                             <div class="control-group span6 offset2" id="paypalDetails" style="display: none;"> 
-                                <!-- Display the payment button. -->  
-                                <input type="image" name="submit" src="img/btn_subscribe_LG.gif"  
-                                       alt="PayPal - The safer, easier way to pay online">
+                                <input type="text" id="inputPaypalEmail" name="inputPaypalEmail"  placeholder="E-mail PayPal" class="input-xlarge" maxlength="255" value="<?=$customer->getPaypal();?>">
                             </div> 
                         </div>
                         <div class="span6">
                             <div class="control-group">
                                 <label class="control-label" for="inputQuantity">Quantidade</label>
                                 <div class="controls">
-                                    <input type="number" id="inputQuantity" placeholder="" class="input-xlarge" min="1">
+                                    <input type="number" id="inputQuantity" placeholder="" class="input-xlarge" min="1" value="1" onchange="updateTotalPrice();">
                                 </div>
                             </div>
                             <div class="control-group">
                                 <label class="control-label" for="inputName">Nome</label>
                                 <div class="controls">
-                                    <input type="text" id="inputName" placeholder="Nome" class="input-xlarge" required maxlength="160">
+                                    <input type="text" id="inputName" placeholder="Nome" class="input-xlarge" required maxlength="160"  value="<?=$customer->getName();?>">
                                 </div>
                             </div>
                             <div class="control-group">
                                 <label class="control-label" for="inputZipcode1">Código Postal</label>
                                 <div class="controls controls-row">
-                                    <input type="text" id="inputZipcode1" placeholder="Código" class="input-small" maxlength="12">
-                                    <input type="text" id="inputZipcode2" placeholder="Localidade" class="input-medium pull-right" maxlength="60">
+                                    <input type="text" id="inputZipcode1" placeholder="Código" class="input-small" maxlength="12" value="<?=$customer->getAddresses()->getPostalcode();?>">
+                                    <input type="text" id="inputZipcode2" placeholder="Localidade" class="input-medium pull-right" maxlength="60" value="<?=$customer->getAddresses()->getCity();?>">
                                 </div>
                             </div>
                             <div class="control-group">
                                 <label class="control-label" for="inputMovel">Telemovel</label>
                                 <div class="controls">
-                                    <input type="text" id="inputMovel" placeholder="Telemovel" class="input-xlarge" pattern="9(1|2|3|6)\d{7}" maxlength="16">
+                                    <input type="text" id="inputMovel" placeholder="Telemovel" class="input-xlarge" pattern="9(1|2|3|6)\d{7}" maxlength="16"  value="<?=$customer->getPhonenr();?>">
                                 </div>
                             </div>
                             <div class="control-group">
                                 <label class="control-label" for="inputEmail">Email</label>
                                 <div class="controls">
-                                    <input type="email" id="inputEmail" placeholder="Email" class="input-xlarge" maxlength="255">
+                                    <input type="email" id="inputEmail" placeholder="Email" class="input-xlarge" maxlength="255"  value="<?=$customer->getEmail();?>">
                                 </div>
                             </div>
                             <div class="control-group">                               

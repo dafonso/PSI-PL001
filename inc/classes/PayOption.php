@@ -1,4 +1,8 @@
 <?php
+/**
+ * @author psi-pl001
+ *
+ */
 class PayOption {
 	/**
 	 * @var integer
@@ -20,10 +24,21 @@ class PayOption {
 	 * @var string
 	 */
 	private $securitycode;
+	
 	/**
+	 * 
 	 * @var Customer
 	 */
 	private $customer;
+	
+	public function __construct($payOptionData = null) {
+		if($payOptionData != null) {
+			$this->setId($payOptionData['PAYOPTION_ID']);
+			$this->setCardnr($payOptionData['CARDNR']);
+			$this->setExpirydate($payOptionData['EXPIRYDATE']);
+			$this->setSecuritycode($payOptionData['SECURITYCODE']);
+		}
+	}
 
 	/**
 	 *
@@ -62,7 +77,11 @@ class PayOption {
 	 * @return
 	 */
 	public function getCardnr() {
-		return $this -> cardnr;
+		return $this->cardnr;
+	}
+	
+	public function getHiddenCardnr() {
+		return 'xxxx xxxx xxxx x'.substr($this->cardnr, -3);
 	}
 
 	/**
@@ -105,23 +124,14 @@ class PayOption {
 		$this -> securitycode = $securitycode;
 	}
 
-
-	/**
-	 *
-	 * @return
-	 */
 	public function getCustomer()
 	{
-		return $this->customer;
+	    return $this->customer;
 	}
 
-	/**
-	 *
-	 * @param $customer
-	 */
 	public function setCustomer($customer)
 	{
-		$this->customer = $customer;
+	    $this->customer = $customer;
 	}
 }
 ?>

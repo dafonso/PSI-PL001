@@ -13,8 +13,9 @@ if(isset($_POST['inputUsername'])) {
 	
 	$rand = rand(0, 6);
 	$customer_password = substr(sha1(time().'PSIPL001'), 0, 8);
+	$customer_password = substr(sha1(time().'PSIPL001'), 0, 8);
 	
-	$customer->setPassword(sha1($costumer_password));
+	$customer->setPassword(sha1($customer_password));
 	
 	$customer_id = $db->insertCustomer($customer);
 	
@@ -25,6 +26,9 @@ ShopCUL
 MESSAGE;
 		
 	mail($_POST['inputEmail'], 'ShopCUL: A sua password', $message);
+
+// 	if(is_numeric($customer->getPhonenr()))
+// 		sendSMS($customer->getPhonenr(), "A sua password: $customer_password");
 	
 	$customer->setId($customer_id);
 
@@ -41,9 +45,11 @@ MESSAGE;
 		
 		$address->setId($address_id);
 		
- 		$customer_address = new CustomerAddress($customer, $address);
+		$customer->setAddresses($address);
 		
-		$db->insertCustomerAddress($customer_address);
+ 		$customerAddress = new CustomerAddress(array('CUSTOMER_CUSTOMER_ID' => $customer->getId(), 'ADDRESS_ADDRESS_ID' => $address->getId()));
+		
+		$db->insertCustomerAddress($customerAddress);
 		
 	}
 	
@@ -58,6 +64,8 @@ MESSAGE;
 		
 		$payoption_id = $db->insertPayOption($payoption);
 		$payoption->setId($payoption_id);
+		
+		$customer->setPayoption($payoption);
 	}
 	
 	$db->close();
