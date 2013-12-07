@@ -76,6 +76,58 @@ while ($row = oci_fetch_array($stid)) {
 	$relatorio_valor_3 .= ", ['" . date("M Y", $date) . "', " . $row[1] . "]";
 }
 
+/*Relatorio 4*/
+$queryAllYears = "
+SELECT 
+trunc(transaction.purchasedate,'yy'),
+sum(transactionline.quantity * transactionline.priceperunit) as Total
+FROM transactionline
+INNER JOIN transaction ON transaction.transaction_id = transactionline.transaction_transaction_id
+GROUP BY trunc(transaction.purchasedate,'yy')
+ORDER BY trunc(transaction.purchasedate,'yy')";
+
+$stid = oci_parse($conn, $queryAllYears);
+oci_execute($stid);
+
+$relatorio_valor_4 = "";
+while ($row = oci_fetch_array($stid)) {
+	$date = strtotime($row[0]);
+	$relatorio_valor_4 .= ", ['" . date("Y", $date) . "', " . $row[1] . "]";
+}
+
+/*Relatorio 5*/
+$queryAllWeekDays = "
+SELECT TO_CHAR(transaction.purchasedate, 'D') WEEKDAY,
+sum(transactionline.quantity * transactionline.priceperunit) as Total
+FROM transactionline
+INNER JOIN transaction ON transaction.transaction_id = transactionline.transaction_transaction_id
+GROUP BY TO_CHAR(transaction.purchasedate, 'D')
+ORDER BY TO_CHAR(transaction.purchasedate, 'D')";
+
+$stid = oci_parse($conn, $queryAllWeekDays);
+oci_execute($stid);
+
+$allWeekDays = array(
+	"1" => array("Domingo", 0),
+	"2" => array("Segunda", 0),
+	"3" => array("Terça", 0),
+	"4" => array("Quarta", 0),
+	"5" => array("Quinta", 0),
+	"6" => array("Sexta", 0),
+	"7" => array("Sabado", 0)
+	);
+	
+
+
+while ($row = oci_fetch_array($stid)) {
+	$allWeekDays[$row[0]][1] = $row[1];
+}
+
+$relatorio_valor_5 = "";
+foreach ($allWeekDays as $day_and_value) {
+	$relatorio_valor_5 .= ", ['" . $day_and_value[0] . "', " . $day_and_value[1] . "]";
+}
+
 /*Relatorio 6*/
 $queryTopCities = "
 SELECT 
@@ -175,15 +227,13 @@ while ($row = oci_fetch_array($stid)) {
                 //relatorio 4
                 // Some raw data (not necessarily accurate)
                 data = google.visualization.arrayToDataTable([
-                    ['year', 'Total'],
-                    ['2011', 16022],
-                    ['2012', 10512],
-                    ['2013', 12712]
+                    ['year', 'Total']
+                    <?php echo $relatorio_valor_4; ?>
                 ]);
 
                 options = {
                     title: 'Total de vendas anuais',
-                    vAxis: {title: "Total"},
+                    vAxis: {title: "Total €"},
                     hAxis: {title: "Ano"},
                     seriesType: "bars",
                     'height': 300,
@@ -196,19 +246,13 @@ while ($row = oci_fetch_array($stid)) {
                 //relatorio 5
                 // Some raw data (not necessarily accurate)
                 data = google.visualization.arrayToDataTable([
-                    ['dayOfWeek', 'Total'],
-                    ['2ª', 15],
-                    ['3ª', 20],
-                    ['4ª', 12],
-                    ['5ª', 42],
-                    ['6ª', 5],
-                    ['sabado', 45],
-                    ['domingo', 23]
+                    ['dayOfWeek', 'Total']
+                    <?php echo $relatorio_valor_5; ?>
                 ]);
 
                 options = {
-                    title: 'Total de vendas semanal',
-                    vAxis: {title: "Total"},
+                    title: 'Total de vendas por dia da semana',
+                    vAxis: {title: "Total €"},
                     hAxis: {title: "Dia de semana"},
                     seriesType: "bars",
                     'height': 300,
