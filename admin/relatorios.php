@@ -57,7 +57,49 @@ while ($row = oci_fetch_array($stid)) {
 	}
 }
 
-echo $relatorio_valor_2;
+/*Relatorio 3*/
+$queryAllMonths = "
+SELECT 
+trunc(transaction.purchasedate,'mm'),
+sum(transactionline.quantity * transactionline.priceperunit) as Total
+FROM transactionline
+INNER JOIN transaction ON transaction.transaction_id = transactionline.transaction_transaction_id
+GROUP BY trunc(transaction.purchasedate,'mm')
+ORDER BY trunc(transaction.purchasedate,'mm')";
+
+$stid = oci_parse($conn, $queryAllMonths);
+oci_execute($stid);
+
+$relatorio_valor_3 = "";
+while ($row = oci_fetch_array($stid)) {
+	$date = strtotime($row[0]);
+	$relatorio_valor_3 .= ", ['" . date("M Y", $date) . "', " . $row[1] . "]";
+}
+
+/*Relatorio 6*/
+$queryTopCities = "
+SELECT 
+address.city,
+sum(transactionline.quantity * transactionline.priceperunit) as Total
+FROM transactionline
+INNER JOIN product ON product.product_id = transactionline.product_product_id
+INNER JOIN transaction ON transaction.transaction_id = transactionline.transaction_transaction_id
+INNER JOIN customer_address ON customer_address.customer_customer_id = transaction.customer_customer_id
+INNER JOIN address ON address.address_id = customer_address.address_address_id
+GROUP BY address.city
+ORDER BY Total desc";
+
+$stid = oci_parse($conn, $queryTopCities);
+oci_execute($stid);
+
+$relatorio_valor_6 = "";
+$i = 0;
+while ($row = oci_fetch_array($stid)) {
+	$relatorio_valor_6 .= ", ['" . $row[0] . "', " . $row[1] . "]";
+	if (!($i++ < 5)){
+		break;
+	}
+}
 
 ?>
 
@@ -82,7 +124,7 @@ echo $relatorio_valor_2;
                 ]);
 
                 var options = {
-                    title: 'Melhores Clientes da shopCUL',
+                    title: 'Top de Clientes da shopCUL',
                     vAxis: {title: "Compras €"},
                     hAxis: {title: "Nome"},
                     seriesType: "bars",
@@ -100,7 +142,7 @@ echo $relatorio_valor_2;
                 ]);
 
                 options = {
-                    title: 'Melhores Produtos da shopCUL',
+                    title: 'Top de Produtos da shopCUL',
                     vAxis: {title: "Vendas €"},
                     hAxis: {title: "Produto"},
                     seriesType: "bars",
@@ -114,17 +156,13 @@ echo $relatorio_valor_2;
                 //relatorio 3
                 // Some raw data (not necessarily accurate)
                 data = google.visualization.arrayToDataTable([
-                    ['month', 'Total'],
-                    ['Janeiro', 160],
-                    ['Fevereiro', 105],
-                    ['Março', 127],
-                    ['Abril', 199],
-                    ['Maio', 351]
+                    ['Mês', 'Total']
+                    <?php echo $relatorio_valor_3; ?>
                 ]);
 
                 options = {
                     title: 'Total de vendas mensais',
-                    vAxis: {title: "Total"},
+                    vAxis: {title: "Total €"},
                     hAxis: {title: "Mês"},
                     seriesType: "bars",
                     'height': 300,
@@ -185,15 +223,13 @@ echo $relatorio_valor_2;
                 //relatorio 6
                 // Some raw data (not necessarily accurate)
                 data = google.visualization.arrayToDataTable([
-                    ['city', 'Total'],
-                    ['Lisboa', 1602],
-                    ['Porto', 1052],
-                    ['Coimbra', 1712]
+                    ['city', 'Total']
+                    <?php echo $relatorio_valor_6; ?>
                 ]);
 
                 options = {
-                    title: 'Total de vendas por cidade',
-                    vAxis: {title: "Total"},
+                    title: 'Top de Cidades da shopCUL',
+                    vAxis: {title: "Total €"},
                     hAxis: {title: "Cidade"},
                     seriesType: "bars",
                     'height': 300,
