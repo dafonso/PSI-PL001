@@ -7,7 +7,10 @@ require ('../inc/init.php');
 defined('DB_SERVER') ? null : define("DB_SERVER", "//luna.di.fc.ul.pt/difcul.alunos.di.fc.ul.pt");
 defined('DB_USER') ? null : define("DB_USER", "psi001pl");
 defined('DB_PASS') ? null : define("DB_PASS", "Ps1PL001");
+$conn = oci_connect(DB_USER, DB_PASS, DB_SERVER);
 
+
+/*Relatorio 1*/
 $queryTopCustomers = "
 SELECT
 customer.username,
@@ -17,26 +20,44 @@ sum(transactionline.quantity * transactionline.priceperunit) as Total
 FROM transaction
 INNER JOIN transactionline ON transactionline.transaction_transaction_id = transaction.transaction_id
 INNER JOIN customer ON customer.customer_id = transaction.customer_customer_id
-WHERE rownum <= 5
 GROUP BY transaction.customer_customer_id, customer.username, customer.name, customer.email
 ORDER BY Total desc";
-
-
-$conn = oci_connect(DB_USER, DB_PASS, DB_SERVER);
 
 $stid = oci_parse($conn, $queryTopCustomers);
 oci_execute($stid);
 
-
 $relatorio_valor_1 = "";
+$i = 0;
 while ($row = oci_fetch_array($stid)) {
 	$relatorio_valor_1 .= ", ['" . $row[1] . "', " . $row[3] . "]";
+		if (!($i++ < 5)){
+		break;
+	}
 }
 
+/*Relatorio 2*/
+$queryTopProducts = "
+SELECT 
+product.name,
+sum(transactionline.quantity * transactionline.priceperunit) as Total
+FROM transactionline
+INNER JOIN product ON product.product_id = transactionline.product_product_id
+GROUP BY transactionline.product_product_id, product.name
+ORDER BY Total desc";
 
-echo $relatorio_valor_1;
+$stid = oci_parse($conn, $queryTopProducts);
+oci_execute($stid);
 
+$relatorio_valor_2 = "";
+$i = 0;
+while ($row = oci_fetch_array($stid)) {
+	$relatorio_valor_2 .= ", ['" . $row[0] . "', " . $row[1] . "]";
+	if (!($i++ < 5)){
+		break;
+	}
+}
 
+echo $relatorio_valor_2;
 
 ?>
 
@@ -56,7 +77,7 @@ echo $relatorio_valor_1;
                 // relatorio 1
                 // Some raw data (not necessarily accurate)
                 var data = google.visualization.arrayToDataTable([
-                    ['username', 'Total']
+                    ['Nome', 'Total']
                     <?php echo $relatorio_valor_1; ?>
                 ]);
 
@@ -74,17 +95,13 @@ echo $relatorio_valor_1;
                 // relatorio 2
                 // Some raw data (not necessarily accurate)
                 data = google.visualization.arrayToDataTable([
-                    ['products', 'Total'],
-                    ['doces', 16],
-                    ['bilhetes', 15],
-                    ['eventos', 17],
-                    ['pastel nata', 19],
-                    ['dança', 35]
+                    ['Produto', 'Total']
+                    <?php echo $relatorio_valor_2; ?>
                 ]);
 
                 options = {
-                    title: 'Top 5 de produtos com maior numero de vendas',
-                    vAxis: {title: "Quantidade"},
+                    title: 'Melhores Produtos da shopCUL',
+                    vAxis: {title: "Vendas €"},
                     hAxis: {title: "Produto"},
                     seriesType: "bars",
                     'height': 300,                    
