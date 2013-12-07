@@ -33,7 +33,7 @@
                 </li>
             <?php } else { ?>
                 <ul class="nav pull-right">
-                    <li><a href="consultarCliente.php">Olá <?= $_SESSION['user_name']; ?>
+                    <li><a href="consultarPerfil.php">Olá <?= $_SESSION['user_name']; ?>
                         </a></li>
                     <li><a href="historicoCompras.php">Consultar Compras</a>
                     </li>
