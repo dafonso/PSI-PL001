@@ -12,24 +12,20 @@ require 'inc/init.php';
     </head>
     <body>
         <div class="container">
-            <h1>ShopCUL - Compra com sucesso</h1>        
+            <h1>ShopCUL - Compra sucesso</h1>        
             <?php require 'inc/common/nav.php'; ?>
-            <div class="row">
-                <div class="alert alert-success">
-                    <button type="button" class="close" data-dismiss="alert">×</button>
-                    <strong>Sucesso!!!</strong> Aguarde alguns segundos...
-                </div>
+            <div class="alert alert-success">
+                <p><strong>Sucesso!!!</strong></p>Aguarde alguns segundos...
             </div>
         </div>
-    </div>
-    <script src="js/jquery-1.10.2.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-    <script>
-        $(document).ready(function() {
-            setTimeout(function() {
-                window.location = "/~psi-pl001/";
-            }, 1000);
-        });
-    </script>
-</body>
+        <script src="js/jquery-1.10.2.min.js"></script>
+        <script src="js/bootstrap.min.js"></script>
+        <script>
+            $(document).ready(function() {
+                setTimeout(function() {
+                    window.location = "/~psi-pl001/";
+                }, 2000);
+            });
+        </script>
+    </body>
 </html>
