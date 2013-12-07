@@ -3,6 +3,41 @@
 <?php 
 require ('../inc/init.php');
 
+
+defined('DB_SERVER') ? null : define("DB_SERVER", "//luna.di.fc.ul.pt/difcul.alunos.di.fc.ul.pt");
+defined('DB_USER') ? null : define("DB_USER", "psi001pl");
+defined('DB_PASS') ? null : define("DB_PASS", "Ps1PL001");
+
+$queryTopCustomers = "
+SELECT
+customer.username,
+customer.name,
+customer.email,
+sum(transactionline.quantity * transactionline.priceperunit) as Total
+FROM transaction
+INNER JOIN transactionline ON transactionline.transaction_transaction_id = transaction.transaction_id
+INNER JOIN customer ON customer.customer_id = transaction.customer_customer_id
+WHERE rownum <= 5
+GROUP BY transaction.customer_customer_id, customer.username, customer.name, customer.email
+ORDER BY Total desc";
+
+
+$conn = oci_connect(DB_USER, DB_PASS, DB_SERVER);
+
+$stid = oci_parse($conn, $queryTopCustomers);
+oci_execute($stid);
+
+
+$relatorio_valor_1 = "";
+while ($row = oci_fetch_array($stid)) {
+	$relatorio_valor_1 .= ", ['" . $row[1] . "', " . $row[3] . "]";
+}
+
+
+echo $relatorio_valor_1;
+
+
+
 ?>
 
 <html>
@@ -21,18 +56,14 @@ require ('../inc/init.php');
                 // relatorio 1
                 // Some raw data (not necessarily accurate)
                 var data = google.visualization.arrayToDataTable([
-                    ['username', 'Total'],
-                    ['eneves', 165],
-                    ['eneves', 135],
-                    ['eneves', 157],
-                    ['eneves', 139],
-                    ['eneves', 136]
+                    ['username', 'Total']
+                    <?php echo $relatorio_valor_1; ?>
                 ]);
 
                 var options = {
-                    title: 'Top 5 de clientes com maior numero de vendas',
-                    vAxis: {title: "Compras"},
-                    hAxis: {title: "Username"},
+                    title: 'Melhores Clientes da shopCUL',
+                    vAxis: {title: "Compras €"},
+                    hAxis: {title: "Nome"},
                     seriesType: "bars",
                     'height': 300
                 };
