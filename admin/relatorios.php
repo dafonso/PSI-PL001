@@ -1,8 +1,10 @@
+<!DOCTYPE html>
+
 <?php 
-require 'inc/init.php';
+require ('../inc/init.php');
 
 ?>
-<!DOCTYPE html>
+
 <html>
     <head>
         <title>Relatório</title>
@@ -162,7 +164,7 @@ require 'inc/init.php';
                 <div class="span12">
                     <h1>ShopCUL - Relatórios</h1>            
                 </div>
-                <?php require 'inc/common/nav.php'; ?>
+                <?php require ('../inc/common/nav.php'); ?>
             </div>   
 
             <div class="row">
