@@ -27,9 +27,20 @@ $stid = oci_parse($conn, $queryTopCustomers);
 oci_execute($stid);
 
 $relatorio_valor_1 = "";
+$tabela_valor_1 = "";
 $i = 0;
 while ($row = oci_fetch_array($stid)) {
 	$relatorio_valor_1 .= ", ['" . $row[1] . "', " . $row[3] . "]";
+	// $tabela_valor_1 .= "<tr>";
+	// $show = true;
+	// foreach ($row as $cell) {
+		// if ($show){
+			// $tabela_valor_1 .= "<td>" . $cell . "</td>";
+		// }	
+		// $show = !$show;
+// 		
+	// }
+	// $tabela_valor_1 .= "</tr>";
 		if (!($i++ < 5)){
 		break;
 	}
@@ -308,44 +319,6 @@ while ($row = oci_fetch_array($stid)) {
             </div> 
             <div class="row">
                 <div class="span12">
-                    <table class="table table-striped">
-                        <thead>
-                            <tr>
-                                <th>Id</th>
-                                <th>Username</th>
-                                <th>Name</th>
-                                <th>Email</th>
-                                <th>Total</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>1</td>
-                                <td>eneves</td>
-                                <td>Emanuel</td>
-                                <td>neves.emanuel@gmail.com</td>
-                                <td>100,00€</td>
-                            </tr>
-                            <tr>
-                                <td>2</td>
-                                <td>eneves</td>
-                                <td>Emanuel</td>
-                                <td>neves.emanuel@gmail.com</td>
-                                <td>100,00€</td>
-                            </tr>
-                            <tr>
-                                <td>3</td>
-                                <td>eneves</td>
-                                <td>Emanuel</td>
-                                <td>neves.emanuel@gmail.com</td>
-                                <td>100,00€</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>                
-            </div>            
-            <div class="row">
-                <div class="span12">
                     <h2>Relatório 2</h2>            
                 </div>
             </div>  
@@ -357,40 +330,6 @@ while ($row = oci_fetch_array($stid)) {
             </div> 
             <div class="row">
                 <div class="span12">
-                    <table class="table table-striped">
-                        <thead>
-                            <tr>
-                                <th>Nome</th>
-                                <th>Quantidade Total</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>doces</td>
-                                <td>16</td>
-                            </tr>
-                            <tr>
-                                <td>bilhetes</td>
-                                <td>15</td>
-                            </tr>
-                            <tr>
-                                <td>eventos</td>
-                                <td>17</td>
-                            </tr>
-                            <tr>
-                                <td>pastel nata</td>
-                                <td>19</td>
-                            </tr>
-                            <tr>
-                                <td>dança</td>
-                                <td>35</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>                
-            </div>                        
-            <div class="row">
-                <div class="span12">
                     <h2>Relatório 3</h2>            
                 </div>
             </div>  
@@ -400,48 +339,6 @@ while ($row = oci_fetch_array($stid)) {
                     <div id="total_by_month"></div>
                 </div>
             </div> 
-            <div class="row">
-                <div class="span3">
-                    <label class="control-label">Ano</label>
-                    <select>
-                        <option>2011</option>
-                        <option>2012</option>
-                        <option>2013</option>
-                    </select>
-                </div>
-                <div class="span9">
-                    <table class="table table-striped">
-                        <thead>
-                            <tr>
-                                <th>Mês</th>
-                                <th>Total</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>Janeiro</td>
-                                <td>160</td>
-                            </tr>
-                            <tr>
-                                <td>Fevereiro</td>
-                                <td>105</td>
-                            </tr>
-                            <tr>
-                                <td>Março</td>
-                                <td>127</td>
-                            </tr>
-                            <tr>
-                                <td>Abril</td>
-                                <td>199</td>
-                            </tr>
-                            <tr>
-                                <td>Maio</td>
-                                <td>351</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>                
-            </div>                        
             <div class="row">
                 <div class="span12">
                     <h2>Relatório 4</h2>            
@@ -455,32 +352,6 @@ while ($row = oci_fetch_array($stid)) {
             </div> 
             <div class="row">
                 <div class="span12">
-                    <table class="table table-striped">
-                        <thead>
-                            <tr>
-                                <th>Ano</th>
-                                <th>Total</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>2011</td>
-                                <td>16022</td>
-                            </tr>
-                            <tr>
-                                <td>2012</td>
-                                <td>10512</td>
-                            </tr>
-                            <tr>
-                                <td>2013</td>
-                                <td>12712</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>                
-            </div>                        
-            <div class="row">
-                <div class="span12">
                     <h2>Relatório 5</h2>            
                 </div>
             </div>  
@@ -490,65 +361,6 @@ while ($row = oci_fetch_array($stid)) {
                     <div id="total_by_day_of_week"></div>
                 </div>
             </div> 
-            <div class="row">
-                <div class="span3">
-                    <label class="control-label">Ano</label>
-                    <select>
-                        <option>2011</option>
-                        <option>2012</option>
-                        <option>2013</option>
-                    </select>
-                    <label class="control-label">Semana</label>
-                    <select>
-                        <option>1</option>
-                        <option>2</option>
-                        <option>3</option>
-                        <option>4</option>
-                        <option>5</option>
-                        <option>6</option>
-                    </select>
-                </div>
-                <div class="span9">
-                    <table class="table table-striped">
-                        <thead>
-                            <tr>
-                                <th>Dia da semana</th>
-                                <th>Total</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>2ª</td>
-                                <td>15</td>
-                            </tr>
-                            <tr>
-                                <td>3ª</td>
-                                <td>20</td>
-                            </tr>
-                            <tr>
-                                <td>4ª</td>
-                                <td>12</td>
-                            </tr>
-                            <tr>
-                                <td>5ª</td>
-                                <td>42</td>
-                            </tr>
-                            <tr>
-                                <td>6ª</td>
-                                <td>5</td>
-                            </tr>
-                            <tr>
-                                <td>sabado</td>
-                                <td>45</td>
-                            </tr>
-                            <tr>
-                                <td>domingo</td>
-                                <td>23</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>                
-            </div>                       
             <div class="row">
                 <div class="span12">
                     <h2>Relatório 6</h2>            
@@ -560,32 +372,6 @@ while ($row = oci_fetch_array($stid)) {
                     <div id="total_by_city"></div>
                 </div>
             </div> 
-            <div class="row">
-                <div class="span12">
-                    <table class="table table-striped">
-                        <thead>
-                            <tr>
-                                <th>Cidade</th>
-                                <th>Total</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>Lisboa</td>
-                                <td>1602</td>
-                            </tr>
-                            <tr>
-                                <td>Porto</td>
-                                <td>1052</td>
-                            </tr>
-                            <tr>
-                                <td>Coimbra</td>
-                                <td>1712</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>                
-            </div>   
         </div>
         <script src="js/jquery-1.10.2.min.js"></script>
         <script src="js/bootstrap.min.js"></script>
