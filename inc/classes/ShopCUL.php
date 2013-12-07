@@ -91,6 +91,20 @@ class ShopCUL {
 		return $product;
 	}
 	
+	public static function getTransactionsByCustomer(Customer $customer) {
+		global $db;
+		
+		$transactions = array();
+		
+		$transactionsData = $db->getTransactionsByCustomer($customer);
+		
+		foreach($transactionsData as $transactionData) {
+			array_push($transactions, new Transaction($transactionData));
+		}
+		
+		return $transactions;
+	}
+	
 	public static function retrieveCostumerDataFromRequest() {
 		$customerData = array();
 		
@@ -105,7 +119,5 @@ class ShopCUL {
 		
 		return $customerData;
 	}
-	
-	
 }
 ?>

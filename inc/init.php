@@ -17,10 +17,13 @@ if (isset($_GET['logout'])) {
 }
 
 global $userLoggedIn;
+global $adminLoggedIn;
 global $loginFailed;
 
-$userLoggedIn = false; 
+$userLoggedIn = false;
+$adminLoggedIn = false; 
 $loginFailed = false;
+
 
 if(isset($_SESSION['user_id']) && is_numeric($_SESSION['user_id'])) {
 	$customer = ShopCUL::getCustomerByID($_SESSION['user_id']);

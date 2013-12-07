@@ -44,7 +44,6 @@ class Product {
 	 * @var Category
 	 */
 	private $category;
-	
 	/**
 	 * 
 	 * @var ArrayObject<Image>

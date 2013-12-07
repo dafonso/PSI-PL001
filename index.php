@@ -36,12 +36,8 @@ $categories = ShopCUL::getCategories();
     </head>
     <body>
         <div class="container">
-            <div class="row">
-                <div class="span12">
-                    <h1>ShopCUL - Home</h1>            
-                </div>
-                <?php require 'inc/common/nav.php'; ?>
-            </div>   
+			<h1>ShopCUL - Home</h1>            
+			<?php require 'inc/common/nav.php'; ?>
             <div class="row">
                 <?php foreach($categories as $category) { ?>
                 <div class="span4">                    

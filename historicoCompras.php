@@ -5,6 +5,12 @@ if(!$userLoggedIn) {
 	header('Location: '.REDIRECT_URL_PATH);
 	exit;
 }
+
+$user_id = $_SESSION['user_id'];
+
+$customer = ShopCUL::getCustomerByID($_SESSION['user_id']);
+$transactions = ShopCUL::getTransactionsByCustomer($customer);
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -17,105 +23,34 @@ if(!$userLoggedIn) {
     </head>
     <body>
         <div class="container">
+			<h1>ShopCUL - Histórico Compras</h1>            
+			<?php require 'inc/common/nav.php'; ?>
+            
+			<?php foreach($transactions as $transaction) { ?>
             <div class="row">
                 <div class="span12">
-                    <h1>ShopCUL - Histórico Compras</h1>            
+                    <ul class="thumbnails">            
+                        <h4 class="span3">Data: <?=$transaction->getPurchasedate();?></h4>
+                        <h4 class="pull-right">Total: <?=$transaction->getTransactionTotal();?> €</h4>
+                        <?php foreach ($transaction->getTransactionLines() as $transactionLine) {  
+                        	$images = $transactionLine->getProduct()->getImages();
+                        ?>
+                        <li class="thumbnail span12" style="margin-bottom:10px;">
+                            <img src="<?=(count($images) == 0 ? 'img/dummy-big.png' : $images[0]->getSource());?>" alt="" class="span2" style=" width: 60px; height: 60px;">
+                            <div class="span9"> 
+                                <div class="caption">
+                        			<h5><?=$transactionLine->getProduct()->getName();?> - <?=$transactionLine->getPriceperunit();?> €</h5>
+                                </div>
+                            </div>
+							<div class="span1"><b>Qtd:</b> <?=$transactionLine->getQuantity();?></div>
+                            <div class="span1"><?=($transactionLine->getPriceperunit()*$transactionLine->getQuantity());?> €</div>
+                       </li>
+                       <?php } ?>
+            		</ul>
                 </div>
-                <?php require 'inc/common/nav.php'; ?>
-            </div>   
-            <div class="row">
-                <div class="span12">
-                    <ul class="thumbnails">
-                        <li class="thumbnail span12">
-                            <img src="img/dummy.png" alt="" class="span2">
-                            <div class="span7"> 
-                                <div class="caption">
-                                    <h3>Thumbnail label</h3>
-                                    <div style="max-height: 60px;overflow-y: scroll;">Cras justo odio, dapibus ac facilisis in, egestas eget quam. 
-                                        Donec id elit non mi porta gravida at eget metus.
-                                        Nullam id dolor id nibh ultricies vehicula ut id elit.
-                                        Cras justo odio, dapibus ac facilisis in, egestas eget quam. 
-                                        Donec id elit non mi porta gravida at eget metus.
-                                        Nullam id dolor id nibh ultricies vehicula ut id elit.
-                                        Cras justo odio, dapibus ac facilisis in, egestas eget quam. 
-                                        Donec id elit non mi porta gravida at eget metus.
-                                        Nullam id dolor id nibh ultricies vehicula ut id elit.
-                                        Cras justo odio, dapibus ac facilisis in, egestas eget quam. 
-                                        Donec id elit non mi porta gravida at eget metus.
-                                        Nullam id dolor id nibh ultricies vehicula ut id elit.
-                                        Cras justo odio, dapibus ac facilisis in, egestas eget quam. 
-                                        Donec id elit non mi porta gravida at eget metus.
-                                        Nullam id dolor id nibh ultricies vehicula ut id elit.
-                                    </div>                                
-                                </div>
-                            </div>
-                            <div class="span3">
-                                <p class="lead">Total: xxx,xx€</p>
-                                <p class="lead">Quantidade: 1</p>
-                                <p>Data: 30-11-2013</p>
-                            </div>
-                        </li>
-                        <li class="thumbnail span12">
-                            <img src="img/dummy.png" alt="" class="span2">
-                            <div class="span7"> 
-                                <div class="caption">
-                                    <h3>Thumbnail label</h3>
-                                    <div style="max-height: 60px;overflow-y: scroll;">Cras justo odio, dapibus ac facilisis in, egestas eget quam. 
-                                        Donec id elit non mi porta gravida at eget metus.
-                                        Nullam id dolor id nibh ultricies vehicula ut id elit.
-                                        Cras justo odio, dapibus ac facilisis in, egestas eget quam. 
-                                        Donec id elit non mi porta gravida at eget metus.
-                                        Nullam id dolor id nibh ultricies vehicula ut id elit.
-                                        Cras justo odio, dapibus ac facilisis in, egestas eget quam. 
-                                        Donec id elit non mi porta gravida at eget metus.
-                                        Nullam id dolor id nibh ultricies vehicula ut id elit.
-                                        Cras justo odio, dapibus ac facilisis in, egestas eget quam. 
-                                        Donec id elit non mi porta gravida at eget metus.
-                                        Nullam id dolor id nibh ultricies vehicula ut id elit.
-                                        Cras justo odio, dapibus ac facilisis in, egestas eget quam. 
-                                        Donec id elit non mi porta gravida at eget metus.
-                                        Nullam id dolor id nibh ultricies vehicula ut id elit.
-                                    </div>                                
-                                </div>
-                            </div>
-                            <div class="span3">
-                                <p class="lead">Total: xxx,xx€</p>
-                                <p class="lead">Quantidade: 1</p>
-                                <p>Data: 30-11-2013</p>
-                            </div>
-                        </li>
-                        <li class="thumbnail span12">
-                            <img src="img/dummy.png" alt="" class="span2">
-                            <div class="span7"> 
-                                <div class="caption">
-                                    <h3>Thumbnail label</h3>
-                                    <div style="max-height: 60px;overflow-y: scroll;">Cras justo odio, dapibus ac facilisis in, egestas eget quam. 
-                                        Donec id elit non mi porta gravida at eget metus.
-                                        Nullam id dolor id nibh ultricies vehicula ut id elit.
-                                        Cras justo odio, dapibus ac facilisis in, egestas eget quam. 
-                                        Donec id elit non mi porta gravida at eget metus.
-                                        Nullam id dolor id nibh ultricies vehicula ut id elit.
-                                        Cras justo odio, dapibus ac facilisis in, egestas eget quam. 
-                                        Donec id elit non mi porta gravida at eget metus.
-                                        Nullam id dolor id nibh ultricies vehicula ut id elit.
-                                        Cras justo odio, dapibus ac facilisis in, egestas eget quam. 
-                                        Donec id elit non mi porta gravida at eget metus.
-                                        Nullam id dolor id nibh ultricies vehicula ut id elit.
-                                        Cras justo odio, dapibus ac facilisis in, egestas eget quam. 
-                                        Donec id elit non mi porta gravida at eget metus.
-                                        Nullam id dolor id nibh ultricies vehicula ut id elit.
-                                    </div>                                
-                                </div>
-                            </div>
-                            <div class="span3">
-                                <p class="lead">Total: xxx,xx€</p>
-                                <p class="lead">Quantidade: 1</p>
-                                <p>Data: 30-11-2013</p>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-            </div>
+            </div>            	
+			<?php } ?>
+                    
             <!-- <div class="row">
                 <div class="span4 offset4">
                     <div class="pagination">

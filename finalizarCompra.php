@@ -34,12 +34,8 @@ if(isset($_SESSION['user_id']) && is_numeric($_SESSION['user_id'])) {
     </head>
     <body>
         <div class="container">
-            <div class="row">
-                <div class="span12">
-                    <h1>ShopCUL - Finalizar Compra</h1>            
-                </div>
-                <?php require 'inc/common/nav.php'; ?>
-            </div>
+			<h1>ShopCUL - Finalizar Compra</h1>            
+			<?php require 'inc/common/nav.php'; ?>
             <div class="row">
                 <div class="pull-right">
                     <h3>Total: <span id="transactionTotal"><?=$product->getSellprice();?></span> €</h3>     

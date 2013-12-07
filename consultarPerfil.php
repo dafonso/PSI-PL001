@@ -22,12 +22,8 @@ $customer = ShopCUL::getCustomerByID($_SESSION['user_id']);
     </head>
     <body>
         <div class="container">
-            <div class="row">
-                <div class="span12">
-                    <h1>ShopCUL - Dados Pessoais</h1>            
-                </div>
-                <?php require 'inc/common/nav.php'; ?>
-            </div>
+			<h1>ShopCUL - Dados Pessoais</h1>            
+			<?php require 'inc/common/nav.php'; ?>
             <div class="row">
                 <form class="form-horizontal">
                     <div class="controls-row">

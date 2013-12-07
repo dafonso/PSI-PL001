@@ -31,12 +31,8 @@ $product = null;
     </head>
     <body>
         <div class="container">
-            <div class="row">
-                <div class="span12">
-                    <h1>ShopCUL - Produtos</h1>            
-                </div>
-                <?php require 'inc/common/nav.php'; ?>
-            </div>
+			<h1>ShopCUL - Produtos</h1>            
+            <?php require 'inc/common/nav.php'; ?>
             <div class="row">
                 <div class="span12">
                     <h2><?=$category->getName();?></h2>

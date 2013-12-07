@@ -11,9 +11,8 @@ $userRegistered = false;
 if(isset($_POST['inputUsername'])) {
 	$customer = new Customer(ShopCUL::retrieveCostumerDataFromRequest());
 	
-	$rand = rand(0, 6);
-	$customer_password = substr(sha1(time().'PSIPL001'), 0, 8);
-	$customer_password = substr(sha1(time().'PSIPL001'), 0, 8);
+	$customer_password = substr(sha1(time().'PSIPL001'.rand(0, 6)), 0, 8);
+	$customer_password = 'psipl';
 	
 	$customer->setPassword(sha1($customer_password));
 	
@@ -84,12 +83,8 @@ MESSAGE;
     </head>
     <body>
         <div class="container">
-            <div class="row">
-                <div class="span12">
-                    <h1>ShopCUL - Registo Cliente</h1>            
-                </div>
-                <?php require 'inc/common/nav.php'; ?>
-            </div>
+			<h1>ShopCUL - Registo Cliente</h1>            
+			<?php require 'inc/common/nav.php'; ?>
             <div class="row">
                 <form id="teste" class="form-horizontal" method="post" action="<?=$_SERVER['PHP_SELF'];?>">
                     <div class="controls-row">
@@ -109,7 +104,7 @@ MESSAGE;
                             <div class="control-group">
                                 <label class="control-label" for="inputNIF">Nº Contribuinte</label>
                                 <div class="controls">
-                                    <input type="text" id="inputNIF" name="inputNIF"  placeholder="Nº Contribuinte" class="input-xlarge">
+                                    <input type="text" id="inputNIF" name="inputNIF"  placeholder="Nº Contribuinte" class="input-xlarge" pattern="[0-9]{9}" maxlength="9">
                                 </div>
                             </div>
                             <div class="control-group">

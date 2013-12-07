@@ -24,6 +24,14 @@ class TransactionLine {
 	 * @var Product
 	 */
 	private $product;
+	
+	public function __construct($transactionLineData = null) {
+		if($transactionLineData != null) {
+			$this->setId($transactionLineData['TRANSACTIONLINE_ID']);
+			$this->setQuantity($transactionLineData['QUANTITY']);
+			$this->setPriceperunit($transactionLineData['PRICEPERUNIT']);
+		}
+	}
 
 	/**
 	 *
@@ -94,7 +102,13 @@ class TransactionLine {
 	 * @return
 	 */
 	public function getProduct() {
-		return $this -> product;
+		global $db;
+		
+		if(!($this->product instanceof Product)) {
+			$this->setProduct(new Product($db->getProductByTransactionLine($this)));
+		}
+		
+		return $this->product;
 	}
 
 	/**

@@ -361,6 +361,19 @@ class OCI_DB {
 		return oci_fetch_assoc($productStmt);
 	}
 	
+	public function getProductByTransactionLine(TransactionLine $transactionLine) {
+		$selectProductSQL = "SELECT * FROM PRODUCT WHERE PRODUCT_ID = (SELECT PRODUCT_PRODUCT_ID FROM TRANSACTIONLINE WHERE TRANSACTIONLINE_ID = :p_TRANSACTIONLINE_ID)";
+	
+		$productStmt = oci_parse($this->db, $selectProductSQL);
+	
+		oci_bind_by_name($productStmt, ":p_TRANSACTIONLINE_ID", $transactionLine->getId());
+	
+		if(!oci_execute($productStmt))
+			return false;
+	
+		return oci_fetch_assoc($productStmt);
+	}
+	
 	public function getProductsByCategory(Category $category) {
 		$products = array();
 		
@@ -562,19 +575,21 @@ class OCI_DB {
 		return oci_fetch_assoc($categoryStmt);
 	}
 	
-	public function getTransactionLines() {
-		$categories = array();
+	public function getTransactionLines($id) {
+		$transactionLines = array();
 		
-		$selectCategoriesSQL = "SELECT * FROM CATEGORY";
+		$transactionLinesSQL = "SELECT * FROM TRANSACTIONLINE WHERE TRANSACTION_TRANSACTION_ID = :p_TRANSACTION_ID";
 		
-		$categoriesStmt = oci_parse($this->db, $selectCategoriesSQL);
+		$transactionLinesStmt = oci_parse($this->db, $transactionLinesSQL);
 		
-		if(!oci_execute($categoriesStmt))
+		oci_bind_by_name($transactionLinesStmt, ":p_TRANSACTION_ID", $id);
+		
+		if(!oci_execute($transactionLinesStmt))
 			return false;
 		
-		$categories = oci_fetch_all($categoriesStmt, $categories, 0, -1, OCI_FETCHSTATEMENT_BY_ROW + OCI_ASSOC);
+		 oci_fetch_all($transactionLinesStmt, $transactionLines, 0, -1, OCI_FETCHSTATEMENT_BY_ROW + OCI_ASSOC);
 		
-		return $categories;
+		return $transactionLines;
 	}
 }
 

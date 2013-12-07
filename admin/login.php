@@ -1,7 +1,7 @@
 <?php 
-require 'inc/init.php';
+require '../inc/init.php';
 
-if($userLoggedIn) {
+if($adminLoggedIn) {
 	header('Location: '.REDIRECT_URL_PATH);
 	exit;
 } 
@@ -13,11 +13,15 @@ if($userLoggedIn) {
 		<meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <!-- Bootstrap -->
-        <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
+        <link href="../css/bootstrap.min.css" rel="stylesheet" media="screen">
     </head>
     <body>
         <div class="container">
-			<h1>ShopCUL - Login</h1>            
+            <div class="row">
+                <div class="span12" style="height: 100px;">
+                    <h1>ShopCUL - Admin Login</h1>            
+                </div>
+            </div>
             <div class="row">
                 <form class="form-horizontal" action="index.php" method="post" >
                     <div class="control-group">
