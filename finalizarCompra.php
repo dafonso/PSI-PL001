@@ -1,12 +1,12 @@
 <?php 
 require 'inc/init.php';
 
-if(!isset($_GET['product_id']) || !is_numeric($_GET['product_id'])) {
-	header('Location: '.REDIRECT_URL_PATH);
-	exit;
+if(!isset($_REQUEST['product_id']) || !is_numeric($_REQUEST['product_id'])) {
+	//header('Location: '.REDIRECT_URL_PATH);
+	//exit;
 }
 
-$product_id = $_GET['product_id'];
+$product_id = $_REQUEST['product_id'];
 
 $product = ShopCUL::getProductByID($product_id);
 
@@ -15,6 +15,11 @@ if(isset($_SESSION['user_id']) && is_numeric($_SESSION['user_id'])) {
 	$customer = ShopCUL::getCustomerByID($user_id);
 } else {
 	$customer = new Customer();
+}
+
+if(isset($_POST['product_id'])) {
+	if(ShopCUL::createTransaction($customer, $product))
+		header('Location: '.REDIRECT_URL_PATH.'compraSucesso.php');
 }
 ?>
 <!DOCTYPE html>
@@ -25,11 +30,25 @@ if(isset($_SESSION['user_id']) && is_numeric($_SESSION['user_id'])) {
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <!-- Bootstrap -->
         <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
+        <script src="js/jquery-1.10.2.min.js"></script>
+        <script src="js/bootstrap.min.js"></script>
         <script type="text/javascript">
-		function updateTotalPrice() {
-			if($('#inputQuantity').val() > 0)
-				$('#transactionTotal').html(Math.round(($('#sellPrice').val() * $('#inputQuantity').val()) * 100) / 100);
-		}
+            $(document).ready(function() {
+                $('input[name="paymentMethod"]').change(function() {
+                    if ($(this).val() === 'paypal') {
+                        $('#ccDetails').hide();
+                        $('#paypalDetails').show();
+                    } else {
+                        $('#ccDetails').show();
+                        $('#paypalDetails').hide();
+                    }
+                });
+            });
+
+	        function updateTotalPrice() {
+				if($('#inputQuantity').val() > 0)
+					$('#transactionTotal').html(Math.round(($('#sellPrice').val() * $('#inputQuantity').val()) * 100) / 100);
+			}
         </script>
     </head>
     <body>
@@ -42,9 +61,9 @@ if(isset($_SESSION['user_id']) && is_numeric($_SESSION['user_id'])) {
                 </div>
             </div>
             <div class="row">
-                <form class="form-horizontal">
+                <form class="form-horizontal" method="post" enctype="multipart/form-data" action="<?=$_SERVER['REQUEST_URI'];?>">
                 	<input type="hidden" id="sellPrice" name="sellPrice" value="<?=$product->getSellprice();?>">
-                	<input type="hidden" id="product_id" name="product_id" value="<?=$product->getSellprice();?>">
+                	<input type="hidden" id="product_id" name="product_id" value="<?=$product->getId();?>">
                     <div class="controls-row">
                         <div class="span6">
                             <div class="control-group">
@@ -101,7 +120,7 @@ if(isset($_SESSION['user_id']) && is_numeric($_SESSION['user_id'])) {
                             <div class="control-group">
                                 <label class="control-label" for="inputQuantity">Quantidade</label>
                                 <div class="controls">
-                                    <input type="number" id="inputQuantity" placeholder="" class="input-xlarge" min="1" value="1" onchange="updateTotalPrice();">
+                                    <input type="number" id="inputQuantity" name="inputQuantity" placeholder="" class="input-xlarge" min="1" value="1" onchange="updateTotalPrice();">
                                 </div>
                             </div>
                             <div class="control-group">
@@ -160,20 +179,5 @@ if(isset($_SESSION['user_id']) && is_numeric($_SESSION['user_id'])) {
                 </form>
             </div>
         </div>
-        <script src="js/jquery-1.10.2.min.js"></script>
-        <script src="js/bootstrap.min.js"></script>
-        <script>
-            $(document).ready(function() {
-                $('input[name="paymentMethod"]').change(function() {
-                    if ($(this).val() === 'paypal') {
-                        $('#ccDetails').hide();
-                        $('#paypalDetails').show();
-                    } else {
-                        $('#ccDetails').show();
-                        $('#paypalDetails').hide();
-                    }
-                });
-            });
-        </script>
     </body>
 </html>

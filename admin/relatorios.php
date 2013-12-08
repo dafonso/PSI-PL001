@@ -8,7 +8,9 @@ require 'inc/init.php';
         <title>Relatório</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <!-- Bootstrap -->
-        <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
+        <link href="../css/bootstrap.min.css" rel="stylesheet" media="screen">
+        <script src="js/jquery-1.10.2.min.js"></script>
+        <script src="js/bootstrap.min.js"></script>
         <!--Load the AJAX API-->
         <script type="text/javascript" src="https://www.google.com/jsapi"></script>
         <script type="text/javascript">
@@ -162,7 +164,7 @@ require 'inc/init.php';
                 <div class="span12">
                     <h1>ShopCUL - Relatórios</h1>            
                 </div>
-                <?php require 'inc/common/nav.php'; ?>
+                <?php require '../inc/common/nav.php'; ?>
             </div>   
 
             <div class="row">
@@ -457,7 +459,5 @@ require 'inc/init.php';
                 </div>                
             </div>   
         </div>
-        <script src="js/jquery-1.10.2.min.js"></script>
-        <script src="js/bootstrap.min.js"></script>
     </body>
 </html>

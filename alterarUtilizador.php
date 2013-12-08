@@ -14,6 +14,21 @@ if(!$userLoggedIn) {
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <!-- Bootstrap -->
         <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
+        <script src="js/jquery-1.10.2.min.js"></script>
+        <script src="js/bootstrap.min.js"></script>
+        <script>
+            $(document).ready(function() {
+                $('input[name="paymentMethod"]').change(function() {
+                    if ($(this).val() === 'paypal') {
+                        $('#ccDetails').hide();
+                        $('#paypalDetails').show();
+                    } else {
+                        $('#ccDetails').show();
+                        $('#paypalDetails').hide();
+                    }
+                });
+            });
+        </script>
     </head>
     <body>
         <div class="container">
@@ -133,20 +148,5 @@ if(!$userLoggedIn) {
                 </form>
             </div>
         </div>
-        <script src="js/jquery-1.10.2.min.js"></script>
-        <script src="js/bootstrap.min.js"></script>
-        <script>
-            $(document).ready(function() {
-                $('input[name="paymentMethod"]').change(function() {
-                    if ($(this).val() === 'paypal') {
-                        $('#ccDetails').hide();
-                        $('#paypalDetails').show();
-                    } else {
-                        $('#ccDetails').show();
-                        $('#paypalDetails').hide();
-                    }
-                });
-            });
-        </script>
     </body>
 </html>

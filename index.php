@@ -41,7 +41,7 @@ $categories = ShopCUL::getCategories();
             <div class="row">
                 <?php foreach($categories as $category) { ?>
                 <div class="span4">                    
-                    <img src="<?=is_null($category->getImagesource()) ? 'img/dummy-big.png' : $category->getImagesource() ;?>" alt="" style=" width: 300px; height: 200px; ">
+                    <a href="escolherProdutos.php?category_id=<?=$category->getId();?>"><img src="<?=is_null($category->getImagesource()) ? 'img/dummy-big.png' : $category->getImagesource() ;?>" alt="" style=" width: 300px; height: 200px; "></a>
                     <h3 style="text-align: center;"><a href="escolherProdutos.php?category_id=<?=$category->getId();?>"><?=$category->getName();?></a></h3>
                 </div>
                 <?php } ?>

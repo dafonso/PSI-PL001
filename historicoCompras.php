@@ -20,12 +20,14 @@ $transactions = ShopCUL::getTransactionsByCustomer($customer);
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <!-- Bootstrap -->
         <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
+        <script src="js/jquery-1.10.2.min.js"></script>
+        <script src="js/bootstrap.min.js"></script>
+        
     </head>
     <body>
         <div class="container">
 			<h1>ShopCUL - Histórico Compras</h1>            
 			<?php require 'inc/common/nav.php'; ?>
-            
 			<?php foreach($transactions as $transaction) { ?>
             <div class="row">
                 <div class="span12">
@@ -67,7 +69,5 @@ $transactions = ShopCUL::getTransactionsByCustomer($customer);
                 </div>
             </div> -->
         </div>
-        <script src="js/jquery-1.10.2.min.js"></script>
-        <script src="js/bootstrap.min.js"></script>
     </body>
 </html>

@@ -17,10 +17,6 @@ class TransactionLine {
 	 */
 	private $priceperunit;
 	/**
-	 * @var Transaction
-	 */
-	private $transaction;
-	/**
 	 * @var Product
 	 */
 	private $product;
@@ -85,22 +81,6 @@ class TransactionLine {
 	 *
 	 * @return
 	 */
-	public function getTransaction() {
-		return $this -> transaction;
-	}
-
-	/**
-	 *
-	 * @param $transaction
-	 */
-	public function setTransaction($transaction) {
-		$this -> transaction = $transaction;
-	}
-
-	/**
-	 *
-	 * @return
-	 */
 	public function getProduct() {
 		global $db;
 		
@@ -115,7 +95,7 @@ class TransactionLine {
 	 *
 	 * @param $product
 	 */
-	public function setProduct($product) {
+	public function setProduct(Product $product) {
 		$this -> product = $product;
 	}
 

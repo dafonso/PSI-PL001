@@ -103,7 +103,6 @@ class OCI_DB {
 		oci_bind_by_name($customerStmt, ":p_CUSTOMER_ID", $customer->getCustomer()->getId());
 		
 		return oci_execute($customerStmt, OCI_COMMIT_ON_SUCCESS);
-	
 	}
 	
 	public function getCustomer($id) {
@@ -131,9 +130,10 @@ class OCI_DB {
 		oci_bind_by_name($customerStmt, ":p_USERNAME" , $username);
 		
 		oci_execute($customerStmt, OCI_COMMIT_ON_SUCCESS);
-
-
-		return oci_fetch_assoc($customerStmt);;	
+		
+		$result = oci_fetch_assoc($customerStmt);
+		
+		return $result == false ? null : $result ;	
 	}
 	
 	/**
@@ -503,8 +503,32 @@ class OCI_DB {
 	 * 
 	 * @param Transaction $address
 	 */
-	public function insertTransaction(Transaction $transaction) {
-	
+	public function insertTransaction(Transaction $transaction, Customer $customer) {
+		$id = null;
+		
+		$insertTransactionSQL = "INSERT INTO TRANSACTION
+							    (
+							      PURCHASEDATE ,
+							      CUSTOMER_CUSTOMER_ID ,
+							      TRANSACTION_ID
+							    )
+							    VALUES
+							    (
+							      SYSDATE ,
+							      :p_CUSTOMER_CUSTOMER_ID ,
+							      TRANSACTION_TRANSACTION_ID_SEQ.NEXTVAL
+							    )
+								RETURNING TRANSACTION_ID INTO :p_TRANSACTION_ID";
+		
+		$transactionStmt = oci_parse($this->db, $insertTransactionSQL);
+		
+		oci_bind_by_name($transactionStmt, 'p_CUSTOMER_CUSTOMER_ID', $customer->getId());
+		oci_bind_by_name($transactionStmt, 'p_TRANSACTION_ID', $id);
+		
+		if(!oci_execute($transactionStmt, OCI_COMMIT_ON_SUCCESS))
+			return false;
+
+		return $id;
 	}
 	
 	public function updateTransaction(Transaction $transaction) {
@@ -532,7 +556,7 @@ class OCI_DB {
 	public function getTransactionsByCustomer(Customer $customer) {
 		$transactions = array();
 		
-		$selectTransactionsSQL = "SELECT * FROM TRANSACTION WHERE CUSTOMER_CUSTOMER_ID = :p_CUSTOMER_ID";
+		$selectTransactionsSQL = "SELECT * FROM TRANSACTION WHERE CUSTOMER_CUSTOMER_ID = :p_CUSTOMER_ID ORDER BY PURCHASEDATE DESC";
 		
 		$transactionsStmt = oci_parse($this->db, $selectTransactionsSQL);
 		
@@ -550,8 +574,39 @@ class OCI_DB {
 	 * 
 	 * @param TransactionLine $transactionLine
 	 */
-	public function insertTransactionLine(TransactionLine $transactionLine) {
-	
+	public function insertTransactionLine(TransactionLine $transactionLine, Transaction $transaction) {
+		$id = null;
+
+		$insertTransactionLineSQL = "INSERT INTO TRANSACTIONLINE
+								    (
+								      TRANSACTIONLINE_ID ,
+								      PRICEPERUNIT ,
+								      TRANSACTION_TRANSACTION_ID ,
+								      PRODUCT_PRODUCT_ID ,
+								      QUANTITY
+								    )
+								    VALUES
+								    (
+								      TRANSACTIONLINE_TRANSACTIONLIN.NEXTVAL ,
+								      :p_PRICEPERUNIT ,
+								      :p_TRANSACTION_TRANSACTION_ID ,
+								      :p_PRODUCT_PRODUCT_ID ,
+								      :p_QUANTITY
+								    )
+									RETURNING TRANSACTIONLINE_ID INTO :p_TRANSACTIONLINE_ID";
+		
+		$insertTransactionLineStmt = oci_parse($this->db, $insertTransactionLineSQL);
+		
+		oci_bind_by_name($insertTransactionLineStmt, ':p_PRICEPERUNIT', $transactionLine->getPriceperunit());
+		oci_bind_by_name($insertTransactionLineStmt, ':p_TRANSACTION_TRANSACTION_ID', $transaction->getId());
+		oci_bind_by_name($insertTransactionLineStmt, ':p_PRODUCT_PRODUCT_ID', $transactionLine->getProduct()->getId());
+		oci_bind_by_name($insertTransactionLineStmt, ':p_QUANTITY', $transactionLine->getQuantity());
+		oci_bind_by_name($insertTransactionLineStmt, ':p_TRANSACTIONLINE_ID', $id);
+		
+		if(!oci_execute($insertTransactionLineStmt, OCI_COMMIT_ON_SUCCESS))
+			return false;
+		
+		return $id;
 	}
 	
 	public function updateTransactionLine(TransactionLine $transactionLine) {
@@ -585,7 +640,7 @@ class OCI_DB {
 		oci_bind_by_name($transactionLinesStmt, ":p_TRANSACTION_ID", $id);
 		
 		if(!oci_execute($transactionLinesStmt))
-			return false;
+			return null;
 		
 		 oci_fetch_all($transactionLinesStmt, $transactionLines, 0, -1, OCI_FETCHSTATEMENT_BY_ROW + OCI_ASSOC);
 		

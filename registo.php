@@ -80,6 +80,21 @@ MESSAGE;
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <!-- Bootstrap -->
         <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
+        <script src="js/jquery-1.10.2.min.js"></script>
+        <script src="js/bootstrap.min.js"></script>
+        <script>
+            $(document).ready(function() {
+                $('input[name="paymentMethod"]').change(function() {
+                    if ($(this).val() === 'paypal') {
+                        $('#ccDetails').hide();
+                        $('#paypalDetails').show();
+                    } else {
+                        $('#ccDetails').show();
+                        $('#paypalDetails').hide();
+                    }
+                });
+            });
+        </script>
     </head>
     <body>
         <div class="container">
@@ -120,19 +135,19 @@ MESSAGE;
                                 <div class="control-group">
                                     <label class="control-label" for="inputCardNumber">Nº Cartão</label>
                                     <div class="controls">
-                                        <input type="text" id="inputCardNumber" name="inputCardNumber"  placeholder="Nº Cartão" class="input-xlarge" maxlength="16">
+                                        <input type="text" id="inputCardNumber" name="inputCardNumber"  placeholder="Nº Cartão" class="input-xlarge" maxlength="16" pattern="[0-9]{16}">
                                     </div>
                                 </div>
                                 <div class="control-group">
                                     <label class="control-label" for="inputExpiryDate">Data de Expiração</label>
                                     <div class="controls">
-                                        <input type="text" id="inputExpiryDate" name="inputExpiryDate"  placeholder="mm/aa" class="input-small">
+                                        <input type="text" id="inputExpiryDate" name="inputExpiryDate"  placeholder="mm/aa" class="input-small" pattern="^(0[1-9]|1[1-2])/(1[3-9]|2[0-9])$">
                                     </div>
                                 </div>
                                 <div class="control-group">
                                     <label class="control-label" for="inputCS">Codigo de Segurança</label>
                                     <div class="controls">
-                                        <input type="text" id="inputCS" name="inputCS"  placeholder="123" class="input-small" maxlength="3">
+                                        <input type="text" id="inputCS" name="inputCS"  placeholder="123" class="input-small" maxlength="3" pattern="[0-9]{3}">
                                     </div>
                                 </div>
                             </div>
@@ -154,7 +169,7 @@ MESSAGE;
                             <div class="control-group">
                                 <label class="control-label" for="inputZipcode1">Código Postal</label>
                                 <div class="controls controls-row">
-                                    <input type="text" id="inputZipcode1" name="inputZipcode1"  placeholder="Código" class="input-small" maxlength="12">
+                                    <input type="text" id="inputZipcode1" name="inputZipcode1"  placeholder="Código" class="input-small" maxlength="8" pattern="^(\d{4}|\d{4}-\d{3})$">
                                     <input type="text" id="inputCity" name="inputCity"  placeholder="Localidade" class="input-medium pull-right" maxlength="60">
                                 </div>
                             </div>
@@ -202,20 +217,5 @@ MESSAGE;
                 </form>
             </div>
         </div>
-        <script src="js/jquery-1.10.2.min.js"></script>
-        <script src="js/bootstrap.min.js"></script>
-        <script>
-            $(document).ready(function() {
-                $('input[name="paymentMethod"]').change(function() {
-                    if ($(this).val() === 'paypal') {
-                        $('#ccDetails').hide();
-                        $('#paypalDetails').show();
-                    } else {
-                        $('#ccDetails').show();
-                        $('#paypalDetails').hide();
-                    }
-                });
-            });
-        </script>
     </body>
 </html>

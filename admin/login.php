@@ -25,9 +25,9 @@ if($adminLoggedIn) {
             <div class="row">
                 <form class="form-horizontal" action="index.php" method="post" >
                     <div class="control-group">
-                        <label class="control-label" for="inputUsername">Username</label>
+                        <label class="control-label" for="inputSystemUsername">Username</label>
                         <div class="controls">
-                            <input type="text" id="inputUsername" name="inputUsername" placeholder="Username" maxlength="60">
+                            <input type="text" id="inputSystemUsername" name="inputSystemUsername" placeholder="Username" maxlength="60">
                         </div>
                     </div>
                     <div class="control-group">
@@ -49,7 +49,5 @@ if($adminLoggedIn) {
                 </form>
             </div>
         </div>
-        <script src="js/jquery-1.10.2.min.js"></script>
-        <script src="js/bootstrap.min.js"></script>
     </body>
 </html>

@@ -119,5 +119,28 @@ class ShopCUL {
 		
 		return $customerData;
 	}
+	
+	public static function createTransaction(Customer $customer, Product $product) {
+		global $db;
+		
+		$transaction = new Transaction();
+		$transactionLine = new TransactionLine();
+		
+		$transactionLine->setProduct($product);
+		$transactionLine->setQuantity($_POST['inputQuantity']);
+		$transactionLine->setPriceperunit($product->getSellprice());
+		
+		$transaction->setTransactionLines(array($transactionLine));
+		
+		$transaction_id = $db->insertTransaction($transaction, $customer);
+		
+		$transaction->setId($transaction_id);
+		
+		foreach($transaction->getTransactionLines() as $transactionLine) {
+			$db->insertTransactionLine($transactionLine, $transaction);
+		}
+		
+		return is_numeric($transaction_id); 
+	}
 }
 ?>
