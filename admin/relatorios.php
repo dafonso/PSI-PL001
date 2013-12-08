@@ -1,463 +1,373 @@
-<?php 
-require 'inc/init.php';
-
-?>
 <!DOCTYPE html>
+
+<?php
+	require ('../inc/init.php');
+
+	defined('DB_SERVER') ? null : define("DB_SERVER", "//luna.di.fc.ul.pt/difcul.alunos.di.fc.ul.pt");
+	defined('DB_USER') ? null : define("DB_USER", "psi001pl");
+	defined('DB_PASS') ? null : define("DB_PASS", "Ps1PL001");
+	$conn = oci_connect(DB_USER, DB_PASS, DB_SERVER);
+
+	/*Relatorio 1*/
+	$queryTopCustomers = "
+SELECT
+customer.username,
+customer.name,
+customer.email,
+sum(transactionline.quantity * transactionline.priceperunit) as Total
+FROM transaction
+INNER JOIN transactionline ON transactionline.transaction_transaction_id = transaction.transaction_id
+INNER JOIN customer ON customer.customer_id = transaction.customer_customer_id
+GROUP BY transaction.customer_customer_id, customer.username, customer.name, customer.email
+ORDER BY Total desc";
+
+	$stid = oci_parse($conn, $queryTopCustomers);
+	oci_execute($stid);
+
+	$relatorio_valor_1 = "";
+	$tabela_valor_1 = "";
+	$i = 0;
+	while ($row = oci_fetch_array($stid)) {
+		$relatorio_valor_1 .= ", ['" . $row[1] . "', " . $row[3] . "]";
+		// $tabela_valor_1 .= "<tr>";
+		// $show = true;
+		// foreach ($row as $cell) {
+		// if ($show){
+		// $tabela_valor_1 .= "<td>" . $cell . "</td>";
+		// }
+		// $show = !$show;
+		//
+		// }
+		// $tabela_valor_1 .= "</tr>";
+		if (!($i++ < 4)) {
+			break;
+		}
+	}
+
+	/*Relatorio 2*/
+	$queryTopProducts = "
+SELECT 
+product.name,
+sum(transactionline.quantity * transactionline.priceperunit) as Total
+FROM transactionline
+INNER JOIN product ON product.product_id = transactionline.product_product_id
+GROUP BY transactionline.product_product_id, product.name
+ORDER BY Total desc";
+
+	$stid = oci_parse($conn, $queryTopProducts);
+	oci_execute($stid);
+
+	$relatorio_valor_2 = "";
+	$i = 0;
+	while ($row = oci_fetch_array($stid)) {
+		$relatorio_valor_2 .= ", ['" . $row[0] . "', " . $row[1] . "]";
+		if (!($i++ < 4)) {
+			break;
+		}
+	}
+
+	/*Relatorio 3*/
+	$queryAllMonths = "
+SELECT 
+trunc(transaction.purchasedate,'mm'),
+sum(transactionline.quantity * transactionline.priceperunit) as Total
+FROM transactionline
+INNER JOIN transaction ON transaction.transaction_id = transactionline.transaction_transaction_id
+GROUP BY trunc(transaction.purchasedate,'mm')
+ORDER BY trunc(transaction.purchasedate,'mm')";
+
+	$stid = oci_parse($conn, $queryAllMonths);
+	oci_execute($stid);
+
+	$relatorio_valor_3 = "";
+	while ($row = oci_fetch_array($stid)) {
+		$date = strtotime($row[0]);
+		$relatorio_valor_3 .= ", ['" . date("M Y", $date) . "', " . $row[1] . "]";
+	}
+
+	/*Relatorio 4*/
+	$queryAllYears = "
+SELECT 
+trunc(transaction.purchasedate,'yy'),
+sum(transactionline.quantity * transactionline.priceperunit) as Total
+FROM transactionline
+INNER JOIN transaction ON transaction.transaction_id = transactionline.transaction_transaction_id
+GROUP BY trunc(transaction.purchasedate,'yy')
+ORDER BY trunc(transaction.purchasedate,'yy')";
+
+	$stid = oci_parse($conn, $queryAllYears);
+	oci_execute($stid);
+
+	$relatorio_valor_4 = "";
+	while ($row = oci_fetch_array($stid)) {
+		$date = strtotime($row[0]);
+		$relatorio_valor_4 .= ", ['" . date("Y", $date) . "', " . $row[1] . "]";
+	}
+
+	/*Relatorio 5*/
+	$queryAllWeekDays = "
+SELECT TO_CHAR(transaction.purchasedate, 'D') WEEKDAY,
+sum(transactionline.quantity * transactionline.priceperunit) as Total
+FROM transactionline
+INNER JOIN transaction ON transaction.transaction_id = transactionline.transaction_transaction_id
+GROUP BY TO_CHAR(transaction.purchasedate, 'D')
+ORDER BY TO_CHAR(transaction.purchasedate, 'D')";
+
+	$stid = oci_parse($conn, $queryAllWeekDays);
+	oci_execute($stid);
+
+	$allWeekDays = array("1" => array("Domingo", 0), "2" => array("Segunda", 0), "3" => array("Terça", 0), "4" => array("Quarta", 0), "5" => array("Quinta", 0), "6" => array("Sexta", 0), "7" => array("Sabado", 0));
+
+	while ($row = oci_fetch_array($stid)) {
+		$allWeekDays[$row[0]][1] = $row[1];
+	}
+
+	$relatorio_valor_5 = "";
+	foreach ($allWeekDays as $day_and_value) {
+		$relatorio_valor_5 .= ", ['" . $day_and_value[0] . "', " . $day_and_value[1] . "]";
+	}
+
+	/*Relatorio 6*/
+	$queryTopCities = "
+SELECT 
+address.city,
+sum(transactionline.quantity * transactionline.priceperunit) as Total
+FROM transactionline
+INNER JOIN product ON product.product_id = transactionline.product_product_id
+INNER JOIN transaction ON transaction.transaction_id = transactionline.transaction_transaction_id
+INNER JOIN customer_address ON customer_address.customer_customer_id = transaction.customer_customer_id
+INNER JOIN address ON address.address_id = customer_address.address_address_id
+GROUP BY address.city
+ORDER BY Total desc";
+
+	$stid = oci_parse($conn, $queryTopCities);
+	oci_execute($stid);
+
+	$relatorio_valor_6 = "";
+	$i = 0;
+	while ($row = oci_fetch_array($stid)) {
+		$relatorio_valor_6 .= ", ['" . $row[0] . "', " . $row[1] . "]";
+		if (!($i++ < 5)) {
+			break;
+		}
+	}
+?>
+
 <html>
-    <head>
-        <title>Relatório</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <!-- Bootstrap -->
-        <link href="../css/bootstrap.min.css" rel="stylesheet" media="screen">
-        <script src="js/jquery-1.10.2.min.js"></script>
-        <script src="js/bootstrap.min.js"></script>
-        <!--Load the AJAX API-->
-        <script type="text/javascript" src="https://www.google.com/jsapi"></script>
-        <script type="text/javascript">
-            google.load('visualization', '1', {packages: ['corechart']});
-        </script>
-        <script type="text/javascript">
-            function drawVisualization() {
-                // relatorio 1
-                // Some raw data (not necessarily accurate)
-                var data = google.visualization.arrayToDataTable([
-                    ['username', 'Total'],
-                    ['eneves', 165],
-                    ['eneves', 135],
-                    ['eneves', 157],
-                    ['eneves', 139],
-                    ['eneves', 136]
-                ]);
+	<head>
+		<title>Relatórios</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="content-type" content="text/html; charset=utf-8">
+		<!-- Bootstrap -->
+		<link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
+		<!--Load the AJAX API-->
+		<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+		<script type="text/javascript">
+			google.load('visualization', '1', {
+				packages : ['corechart']
+			});
+		</script>
+		<script type="text/javascript">
+			function drawVisualization() {
+// relatorio 1
+// Some raw data (not necessarily accurate)
+var data = google.visualization.arrayToDataTable([
+['Nome', 'Total']<?php echo $relatorio_valor_1; ?>
+	]);
 
-                var options = {
-                    title: 'Top 5 de clientes com maior numero de vendas',
-                    vAxis: {title: "Compras"},
-                    hAxis: {title: "Username"},
-                    seriesType: "bars",
-                    'height': 300
-                };
+var options = {
+	legend:{position:'none'},
+//title: 'Top de Clientes da shopCUL',
+vAxis: {title: "Compras €"},
+hAxis: {title: "Nome"},
+seriesType: "bars",
+'height': 300
+};
 
-                var chart = new google.visualization.ComboChart(document.getElementById('top5_clients'));
-                chart.draw(data, options);
+var chart = new google.visualization.ComboChart(document.getElementById('top5_clients'));
+chart.draw(data, options);
 
-                // relatorio 2
-                // Some raw data (not necessarily accurate)
-                data = google.visualization.arrayToDataTable([
-                    ['products', 'Total'],
-                    ['doces', 16],
-                    ['bilhetes', 15],
-                    ['eventos', 17],
-                    ['pastel nata', 19],
-                    ['dança', 35]
-                ]);
+// relatorio 2
+// Some raw data (not necessarily accurate)
+data = google.visualization.arrayToDataTable([
+['Produto', 'Total']<?php echo $relatorio_valor_2; ?>
+	]);
 
-                options = {
-                    title: 'Top 5 de produtos com maior numero de vendas',
-                    vAxis: {title: "Quantidade"},
-                    hAxis: {title: "Produto"},
-                    seriesType: "bars",
-                    'height': 300,                    
-                    colors: ['#006600']
-                };
+options = {
+legend:{position:'none'},
+//title: 'Top de Produtos da shopCUL',
+vAxis: {title: "Vendas €"},
+hAxis: {title: "Produto"},
+seriesType: "bars",
+'height': 300,
+colors: ['#006600']
+};
 
-                chart = new google.visualization.ComboChart(document.getElementById('top5_products'));
-                chart.draw(data, options);
+chart = new google.visualization.ComboChart(document.getElementById('top5_products'));
+chart.draw(data, options);
 
-                //relatorio 3
-                // Some raw data (not necessarily accurate)
-                data = google.visualization.arrayToDataTable([
-                    ['month', 'Total'],
-                    ['Janeiro', 160],
-                    ['Fevereiro', 105],
-                    ['Março', 127],
-                    ['Abril', 199],
-                    ['Maio', 351]
-                ]);
+//relatorio 3
+// Some raw data (not necessarily accurate)
+data = google.visualization.arrayToDataTable([
+['Mês', 'Total']<?php echo $relatorio_valor_3; ?>
+	]);
 
-                options = {
-                    title: 'Total de vendas mensais',
-                    vAxis: {title: "Total"},
-                    hAxis: {title: "Mês"},
-                    seriesType: "bars",
-                    'height': 300,
-                    colors: ['#FF0000']
-                };
+options = {
+legend:{position:'none'},
+//title: 'Total de vendas mensais',
+vAxis: {title: "Total €"},
+hAxis: {title: "Mês"},
+seriesType: "bars",
+'height': 300,
+colors: ['#FF0000']
+};
 
-                chart = new google.visualization.ComboChart(document.getElementById('total_by_month'));
-                chart.draw(data, options);
+chart = new google.visualization.ComboChart(document.getElementById('total_by_month'));
+chart.draw(data, options);
 
-                //relatorio 4
-                // Some raw data (not necessarily accurate)
-                data = google.visualization.arrayToDataTable([
-                    ['year', 'Total'],
-                    ['2011', 16022],
-                    ['2012', 10512],
-                    ['2013', 12712]
-                ]);
+//relatorio 4
+// Some raw data (not necessarily accurate)
+data = google.visualization.arrayToDataTable([
+['year', 'Total']<?php echo $relatorio_valor_4; ?>
+	]);
 
-                options = {
-                    title: 'Total de vendas anuais',
-                    vAxis: {title: "Total"},
-                    hAxis: {title: "Ano"},
-                    seriesType: "bars",
-                    'height': 300,
-                    colors: ['#FF9933']
-                };
+options = {
+legend:{position:'none'},
+//title: 'Total de vendas anuais',
+vAxis: {title: "Total €"},
+hAxis: {title: "Ano"},
+seriesType: "bars",
+'height': 300,
+colors: ['#FF9933']
+};
 
-                chart = new google.visualization.ComboChart(document.getElementById('total_by_year'));
-                chart.draw(data, options);
+chart = new google.visualization.ComboChart(document.getElementById('total_by_year'));
+chart.draw(data, options);
 
-                //relatorio 5
-                // Some raw data (not necessarily accurate)
-                data = google.visualization.arrayToDataTable([
-                    ['dayOfWeek', 'Total'],
-                    ['2ª', 15],
-                    ['3ª', 20],
-                    ['4ª', 12],
-                    ['5ª', 42],
-                    ['6ª', 5],
-                    ['sabado', 45],
-                    ['domingo', 23]
-                ]);
+//relatorio 5
+// Some raw data (not necessarily accurate)
+data = google.visualization.arrayToDataTable([
+['dayOfWeek', 'Total']<?php echo $relatorio_valor_5; ?>
+	]);
 
-                options = {
-                    title: 'Total de vendas semanal',
-                    vAxis: {title: "Total"},
-                    hAxis: {title: "Dia de semana"},
-                    seriesType: "bars",
-                    'height': 300,
-                    colors: ['#339999']
-                };
+options = {
+legend:{position:'none'},
+//title: 'Total de vendas por dia da semana',
+vAxis: {title: "Total €"},
+hAxis: {title: "Dia de semana"},
+seriesType: "bars",
+'height': 300,
+colors: ['#339999']
+};
 
-                chart = new google.visualization.ComboChart(document.getElementById('total_by_day_of_week'));
-                chart.draw(data, options); 
-                
-                
-                
-                //relatorio 6
-                // Some raw data (not necessarily accurate)
-                data = google.visualization.arrayToDataTable([
-                    ['city', 'Total'],
-                    ['Lisboa', 1602],
-                    ['Porto', 1052],
-                    ['Coimbra', 1712]
-                ]);
+chart = new google.visualization.ComboChart(document.getElementById('total_by_day_of_week'));
+chart.draw(data, options);
 
-                options = {
-                    title: 'Total de vendas por cidade',
-                    vAxis: {title: "Total"},
-                    hAxis: {title: "Cidade"},
-                    seriesType: "bars",
-                    'height': 300,
-                    colors: ['#C0C0C0']
-                };
+//relatorio 6
+// Some raw data (not necessarily accurate)
+data = google.visualization.arrayToDataTable([
+['city', 'Total']<?php echo $relatorio_valor_6; ?>
+	]);
 
-                chart = new google.visualization.ComboChart(document.getElementById('total_by_city'));
-                chart.draw(data, options); 
-            }
-            google.setOnLoadCallback(drawVisualization);
-        </script>
-    </head>
-    <body>
-        <div class="container">
-            <div class="row">
-                <div class="span12">
-                    <h1>ShopCUL - Relatórios</h1>            
-                </div>
-                <?php require '../inc/common/nav.php'; ?>
-            </div>   
+	options = {
+		legend:{position:'none'},
+		//title : 'Top de Cidades da shopCUL',
+		vAxis : {
+			title : "Total €"
+		},
+		hAxis : {
+			title : "Cidade"
+		},
+		seriesType : "bars",
+		'height' : 300,
+		colors : ['#C0C0C0']
+	};
 
-            <div class="row">
-                <div class="span12">
-                    <h2>Relatório 1</h2>            
-                </div>
-            </div> 
-            <div class="row">
-                <div class="span12">
-                    <!--Div that will hold the pie chart-->
-                    <div id="top5_clients"></div>
-                </div>
-            </div> 
-            <div class="row">
-                <div class="span12">
-                    <table class="table table-striped">
-                        <thead>
-                            <tr>
-                                <th>Id</th>
-                                <th>Username</th>
-                                <th>Name</th>
-                                <th>Email</th>
-                                <th>Total</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>1</td>
-                                <td>eneves</td>
-                                <td>Emanuel</td>
-                                <td>neves.emanuel@gmail.com</td>
-                                <td>100,00€</td>
-                            </tr>
-                            <tr>
-                                <td>2</td>
-                                <td>eneves</td>
-                                <td>Emanuel</td>
-                                <td>neves.emanuel@gmail.com</td>
-                                <td>100,00€</td>
-                            </tr>
-                            <tr>
-                                <td>3</td>
-                                <td>eneves</td>
-                                <td>Emanuel</td>
-                                <td>neves.emanuel@gmail.com</td>
-                                <td>100,00€</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>                
-            </div>            
-            <div class="row">
-                <div class="span12">
-                    <h2>Relatório 2</h2>            
-                </div>
-            </div>  
-            <div class="row">
-                <div class="span12">
-                    <!--Div that will hold the pie chart-->
-                    <div id="top5_products"></div>
-                </div>
-            </div> 
-            <div class="row">
-                <div class="span12">
-                    <table class="table table-striped">
-                        <thead>
-                            <tr>
-                                <th>Nome</th>
-                                <th>Quantidade Total</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>doces</td>
-                                <td>16</td>
-                            </tr>
-                            <tr>
-                                <td>bilhetes</td>
-                                <td>15</td>
-                            </tr>
-                            <tr>
-                                <td>eventos</td>
-                                <td>17</td>
-                            </tr>
-                            <tr>
-                                <td>pastel nata</td>
-                                <td>19</td>
-                            </tr>
-                            <tr>
-                                <td>dança</td>
-                                <td>35</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>                
-            </div>                        
-            <div class="row">
-                <div class="span12">
-                    <h2>Relatório 3</h2>            
-                </div>
-            </div>  
-            <div class="row">
-                <div class="span12">
-                    <!--Div that will hold the pie chart-->
-                    <div id="total_by_month"></div>
-                </div>
-            </div> 
-            <div class="row">
-                <div class="span3">
-                    <label class="control-label">Ano</label>
-                    <select>
-                        <option>2011</option>
-                        <option>2012</option>
-                        <option>2013</option>
-                    </select>
-                </div>
-                <div class="span9">
-                    <table class="table table-striped">
-                        <thead>
-                            <tr>
-                                <th>Mês</th>
-                                <th>Total</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>Janeiro</td>
-                                <td>160</td>
-                            </tr>
-                            <tr>
-                                <td>Fevereiro</td>
-                                <td>105</td>
-                            </tr>
-                            <tr>
-                                <td>Março</td>
-                                <td>127</td>
-                            </tr>
-                            <tr>
-                                <td>Abril</td>
-                                <td>199</td>
-                            </tr>
-                            <tr>
-                                <td>Maio</td>
-                                <td>351</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>                
-            </div>                        
-            <div class="row">
-                <div class="span12">
-                    <h2>Relatório 4</h2>            
-                </div>
-            </div>  
-            <div class="row">
-                <div class="span12">
-                    <!--Div that will hold the pie chart-->
-                    <div id="total_by_year"></div>
-                </div>
-            </div> 
-            <div class="row">
-                <div class="span12">
-                    <table class="table table-striped">
-                        <thead>
-                            <tr>
-                                <th>Ano</th>
-                                <th>Total</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>2011</td>
-                                <td>16022</td>
-                            </tr>
-                            <tr>
-                                <td>2012</td>
-                                <td>10512</td>
-                            </tr>
-                            <tr>
-                                <td>2013</td>
-                                <td>12712</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>                
-            </div>                        
-            <div class="row">
-                <div class="span12">
-                    <h2>Relatório 5</h2>            
-                </div>
-            </div>  
-            <div class="row">
-                <div class="span12">
-                    <!--Div that will hold the pie chart-->
-                    <div id="total_by_day_of_week"></div>
-                </div>
-            </div> 
-            <div class="row">
-                <div class="span3">
-                    <label class="control-label">Ano</label>
-                    <select>
-                        <option>2011</option>
-                        <option>2012</option>
-                        <option>2013</option>
-                    </select>
-                    <label class="control-label">Semana</label>
-                    <select>
-                        <option>1</option>
-                        <option>2</option>
-                        <option>3</option>
-                        <option>4</option>
-                        <option>5</option>
-                        <option>6</option>
-                    </select>
-                </div>
-                <div class="span9">
-                    <table class="table table-striped">
-                        <thead>
-                            <tr>
-                                <th>Dia da semana</th>
-                                <th>Total</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>2ª</td>
-                                <td>15</td>
-                            </tr>
-                            <tr>
-                                <td>3ª</td>
-                                <td>20</td>
-                            </tr>
-                            <tr>
-                                <td>4ª</td>
-                                <td>12</td>
-                            </tr>
-                            <tr>
-                                <td>5ª</td>
-                                <td>42</td>
-                            </tr>
-                            <tr>
-                                <td>6ª</td>
-                                <td>5</td>
-                            </tr>
-                            <tr>
-                                <td>sabado</td>
-                                <td>45</td>
-                            </tr>
-                            <tr>
-                                <td>domingo</td>
-                                <td>23</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>                
-            </div>                       
-            <div class="row">
-                <div class="span12">
-                    <h2>Relatório 6</h2>            
-                </div>
-            </div>  
-            <div class="row">
-                <div class="span12">
-                    <!--Div that will hold the pie chart-->
-                    <div id="total_by_city"></div>
-                </div>
-            </div> 
-            <div class="row">
-                <div class="span12">
-                    <table class="table table-striped">
-                        <thead>
-                            <tr>
-                                <th>Cidade</th>
-                                <th>Total</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>Lisboa</td>
-                                <td>1602</td>
-                            </tr>
-                            <tr>
-                                <td>Porto</td>
-                                <td>1052</td>
-                            </tr>
-                            <tr>
-                                <td>Coimbra</td>
-                                <td>1712</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>                
-            </div>   
-        </div>
-    </body>
+	chart = new google.visualization.ComboChart(document.getElementById('total_by_city'));
+	chart.draw(data, options);
+	}
+	google.setOnLoadCallback(drawVisualization);
+		</script>
+	</head>
+	<body>
+		<div class="container">
+			<div class="row">
+				<div class="span12">
+					<h1>ShopCUL - Relatórios</h1>
+				</div>
+				<?php
+					require ('../inc/common/nav.php');
+				?>
+			</div>
+
+			<div class="row">
+				<div class="span12">
+					<h2>Top de Clientes da shopCUL</h2>
+				</div>
+			</div>
+			<div class="row">
+				<div class="span12">
+					<!--Div that will hold the pie chart-->
+					<div id="top5_clients"></div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="span12">
+					<h2>Top de Produtos da shopCUL</h2>
+				</div>
+			</div>
+			<div class="row">
+				<div class="span12">
+					<!--Div that will hold the pie chart-->
+					<div id="top5_products"></div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="span12">
+					<h2>Total de Vendas Mensais</h2>
+				</div>
+			</div>
+			<div class="row">
+				<div class="span12">
+					<!--Div that will hold the pie chart-->
+					<div id="total_by_month"></div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="span12">
+					<h2>Total de Vendas Anuais</h2>
+				</div>
+			</div>
+			<div class="row">
+				<div class="span12">
+					<!--Div that will hold the pie chart-->
+					<div id="total_by_year"></div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="span12">
+					<h2>Total de Vendas por Dia da Semana</h2>
+				</div>
+			</div>
+			<div class="row">
+				<div class="span12">
+					<!--Div that will hold the pie chart-->
+					<div id="total_by_day_of_week"></div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="span12">
+					<h2>Top de Cidades da shopCUL</h2>
+				</div>
+			</div>
+			<div class="row">
+				<div class="span12">
+					<!--Div that will hold the pie chart-->
+					<div id="total_by_city"></div>
+				</div>
+			</div>
+		</div>
+		<script src="js/jquery-1.10.2.min.js"></script>
+		<script src="js/bootstrap.min.js"></script>
+	</body>
 </html>
