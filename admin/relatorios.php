@@ -1,7 +1,10 @@
-<!DOCTYPE html>
-
 <?php
 	require ('../inc/init.php');
+	
+	if(!$systemuserLoggedIn) {
+		header('Location: '.REDIRECT_URL_PATH.'admin/login.php');
+		exit;
+	}
 
 	defined('DB_SERVER') ? null : define("DB_SERVER", "//luna.di.fc.ul.pt/difcul.alunos.di.fc.ul.pt");
 	defined('DB_USER') ? null : define("DB_USER", "psi001pl");
@@ -152,14 +155,15 @@ ORDER BY Total desc";
 		}
 	}
 ?>
-
+<!DOCTYPE html>
 <html>
 	<head>
 		<title>Relatórios</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<meta http-equiv="content-type" content="text/html; charset=utf-8">
 		<!-- Bootstrap -->
-		<link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
+		<link href="../css/bootstrap.min.css" rel="stylesheet" media="screen">
+		<link href="../css/stickyfooter.css" rel="stylesheet" media="screen">
 		<!--Load the AJAX API-->
 		<script type="text/javascript" src="https://www.google.com/jsapi"></script>
 		<script type="text/javascript">
@@ -290,84 +294,89 @@ data = google.visualization.arrayToDataTable([
 		</script>
 	</head>
 	<body>
-		<div class="container">
-			<div class="row">
-				<div class="span12">
-					<h1>ShopCUL - Relatórios</h1>
+		<div id="wrapper">
+			<div class="container">
+				<h1>ShopCUL - Relatórios</h1>	
+				<?php require ('../inc/common/nav.php'); ?>
+				<ul class="breadcrumb">
+				  <li><a href="<?=REDIRECT_URL_PATH;?>">Home</a> <span class="divider">/</span></li>
+				  <li><a href="<?=REDIRECT_URL_PATH;?>/admin/">Admin</a> <span class="divider">/</span></li>
+				  <li class="active">Relatórios</li>
+				</ul>
+				<div class="row">
+					<div class="span12">
+						<h2>Top de Clientes da shopCUL</h2>
+					</div>
 				</div>
-				<?php
-					require ('../inc/common/nav.php');
-				?>
-			</div>
-
-			<div class="row">
-				<div class="span12">
-					<h2>Top de Clientes da shopCUL</h2>
+				<div class="row">
+					<div class="span12">
+						<!--Div that will hold the pie chart-->
+						<div id="top5_clients"></div>
+					</div>
 				</div>
-			</div>
-			<div class="row">
-				<div class="span12">
-					<!--Div that will hold the pie chart-->
-					<div id="top5_clients"></div>
+				<div class="row">
+					<div class="span12">
+						<h2>Top de Produtos da shopCUL</h2>
+					</div>
 				</div>
-			</div>
-			<div class="row">
-				<div class="span12">
-					<h2>Top de Produtos da shopCUL</h2>
+				<div class="row">
+					<div class="span12">
+						<!--Div that will hold the pie chart-->
+						<div id="top5_products"></div>
+					</div>
 				</div>
-			</div>
-			<div class="row">
-				<div class="span12">
-					<!--Div that will hold the pie chart-->
-					<div id="top5_products"></div>
+				<div class="row">
+					<div class="span12">
+						<h2>Total de Vendas Mensais</h2>
+					</div>
 				</div>
-			</div>
-			<div class="row">
-				<div class="span12">
-					<h2>Total de Vendas Mensais</h2>
+				<div class="row">
+					<div class="span12">
+						<!--Div that will hold the pie chart-->
+						<div id="total_by_month"></div>
+					</div>
 				</div>
-			</div>
-			<div class="row">
-				<div class="span12">
-					<!--Div that will hold the pie chart-->
-					<div id="total_by_month"></div>
+				<div class="row">
+					<div class="span12">
+						<h2>Total de Vendas Anuais</h2>
+					</div>
 				</div>
-			</div>
-			<div class="row">
-				<div class="span12">
-					<h2>Total de Vendas Anuais</h2>
+				<div class="row">
+					<div class="span12">
+						<!--Div that will hold the pie chart-->
+						<div id="total_by_year"></div>
+					</div>
 				</div>
-			</div>
-			<div class="row">
-				<div class="span12">
-					<!--Div that will hold the pie chart-->
-					<div id="total_by_year"></div>
+				<div class="row">
+					<div class="span12">
+						<h2>Total de Vendas por Dia da Semana</h2>
+					</div>
 				</div>
-			</div>
-			<div class="row">
-				<div class="span12">
-					<h2>Total de Vendas por Dia da Semana</h2>
+				<div class="row">
+					<div class="span12">
+						<!--Div that will hold the pie chart-->
+						<div id="total_by_day_of_week"></div>
+					</div>
 				</div>
-			</div>
-			<div class="row">
-				<div class="span12">
-					<!--Div that will hold the pie chart-->
-					<div id="total_by_day_of_week"></div>
+				<div class="row">
+					<div class="span12">
+						<h2>Top de Cidades da shopCUL</h2>
+					</div>
 				</div>
-			</div>
-			<div class="row">
-				<div class="span12">
-					<h2>Top de Cidades da shopCUL</h2>
-				</div>
-			</div>
-			<div class="row">
-				<div class="span12">
-					<!--Div that will hold the pie chart-->
-					<div id="total_by_city"></div>
+				<div class="row">
+					<div class="span12">
+						<!--Div that will hold the pie chart-->
+						<div id="total_by_city"></div>
+					</div>
 				</div>
 			</div>
 		</div>
-		<script src="js/jquery-1.10.2.min.js"></script>
-		<script src="js/bootstrap.min.js"></script>
+		<div id="footer" class="footer">
+	      <div class="container">
+	        <p class="muted credit">© ShopCUL 2013</p>
+	      </div>
+	    </div>
+	    <script src="js/jquery-1.10.2.min.js"></script>
+        <script src="js/bootstrap.min.js"></script>
 	</body>
 </html>

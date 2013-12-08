@@ -1,10 +1,11 @@
 <?php 
 require '../inc/init.php';
 
-if($adminLoggedIn) {
+if($systemuserLoggedIn) {
 	header('Location: '.REDIRECT_URL_PATH);
 	exit;
-} 
+}
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -23,7 +24,7 @@ if($adminLoggedIn) {
                 </div>
             </div>
             <div class="row">
-                <form class="form-horizontal" action="index.php" method="post" >
+                <form class="form-horizontal" action="index.php" method="post" enctype="multipart/form-data">
                     <div class="control-group">
                         <label class="control-label" for="inputSystemUsername">Username</label>
                         <div class="controls">

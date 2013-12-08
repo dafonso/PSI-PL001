@@ -29,6 +29,18 @@ class SystemUser {
 	 */
 	private $type;
 
+	
+	public function __construct($systemUserData = null) {
+		global $db;
+		
+		if($systemUserData != null) {
+			$this->setId($systemUserData['SYSTEMUSER_ID']);
+			$this->setEmail($systemUserData['EMAIL']);
+			$this->setName($systemUserData['NAME']);
+			$this->setPassword($systemUserData['PASSWORD']);
+			$this->setUsername($systemUserData['USERNAME']);
+		}
+	}
 	/**
 	 *
 	 * @return

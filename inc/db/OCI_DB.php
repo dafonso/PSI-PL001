@@ -120,6 +120,20 @@ class OCI_DB {
 		return $result;
 	}
 	
+	public function getCustomerByNIF($nif) {
+		$result = null;
+	
+		$selectCustomerSQL = "SELECT * FROM CUSTOMER WHERE NIF = :p_NIF";
+		$customerStmt = oci_parse($this->db, $selectCustomerSQL);
+	
+		oci_bind_by_name($customerStmt, ":p_NIF" , $nif);
+	
+		oci_execute($customerStmt, OCI_COMMIT_ON_SUCCESS);
+	
+		$result = oci_fetch_assoc($customerStmt);
+	
+		return $result == false ? null : $result;
+	}
 	
 	public function getCustomerByUsername($username) {
 		$result = null;
@@ -452,8 +466,34 @@ class OCI_DB {
 	
 	}
 	
-	public function getSystemUser() {
+	public function getSystemUser($id) {
+		$result = null;
+		
+		$selectSystemUserSQL = "SELECT * FROM SYSTEMUSER WHERE SYSTEMUSER_ID = :p_SYSTEMUSER_ID";
+		$systemUserStmt = oci_parse($this->db, $selectSystemUserSQL);
+		
+		oci_bind_by_name($systemUserStmt, ":p_SYSTEMUSER_ID" , $id);
+		
+		oci_execute($systemUserStmt);
+		
+		$result = oci_fetch_assoc($systemUserStmt);
+		
+		return $result == false ? null : $result ;
+	}
 	
+	public function getSystemUserByUsername($username) {
+		$result = null;
+	
+		$selectSystemUserSQL = "SELECT * FROM SYSTEMUSER WHERE USERNAME = :p_USERNAME";
+		$systemUserStmt = oci_parse($this->db, $selectSystemUserSQL);
+	
+		oci_bind_by_name($systemUserStmt, ":p_USERNAME" , $username);
+	
+		oci_execute($systemUserStmt);
+	
+		$result = oci_fetch_assoc($systemUserStmt);
+		
+		return $result == false ? null : $result ;
 	}
 	
 	/**

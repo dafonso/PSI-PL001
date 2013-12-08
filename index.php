@@ -28,25 +28,33 @@ $categories = ShopCUL::getCategories();
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Home</title>
+        <title>Home :: ShopCUL</title>
 		<meta http-equiv="content-type" content="text/html; charset=utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <!-- Bootstrap -->
         <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
+        <link href="css/stickyfooter.css" rel="stylesheet" media="screen">
     </head>
     <body>
-        <div class="container">
-			<h1>ShopCUL - Home</h1>            
-			<?php require 'inc/common/nav.php'; ?>
-            <div class="row">
-                <?php foreach($categories as $category) { ?>
-                <div class="span4">                    
-                    <a href="escolherProdutos.php?category_id=<?=$category->getId();?>"><img src="<?=is_null($category->getImagesource()) ? 'img/dummy-big.png' : $category->getImagesource() ;?>" alt="" style=" width: 300px; height: 200px; "></a>
-                    <h3 style="text-align: center;"><a href="escolherProdutos.php?category_id=<?=$category->getId();?>"><?=$category->getName();?></a></h3>
-                </div>
-                <?php } ?>
-            </div>
+        <div id="wrap">
+	        <div class="container">
+				<h1>ShopCUL</h1>            
+				<?php require 'inc/common/nav.php'; ?>
+	            <div class="row">
+	                <?php foreach($categories as $category) { ?>
+	                <div class="span4">                    
+	                    <a href="escolherProdutos.php?category_id=<?=$category->getId();?>"><img src="<?=is_null($category->getImagesource()) ? 'img/dummy-big.png' : $category->getImagesource() ;?>" alt="" style=" width: 300px; height: 200px; "></a>
+	                    <h3 style="text-align: center;"><a href="escolherProdutos.php?category_id=<?=$category->getId();?>"><?=$category->getName();?></a></h3>
+	                </div>
+	                <?php } ?>
+	            </div>
+	        </div>
         </div>
+        <div id="footer" class="footer">
+	      <div class="container">
+	        <p class="muted credit">© ShopCUL 2013</p>
+	      </div>
+	    </div>
         <script src="js/jquery-1.10.2.min.js"></script>
         <script src="js/bootstrap.min.js"></script>
     </body>
