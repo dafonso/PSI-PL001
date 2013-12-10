@@ -25,7 +25,7 @@ $customer = ShopCUL::getCustomerByID($_SESSION['user_id']);
 				<h1>ShopCUL - Alterar Dados Pessoais</h1>
 	            <?php require 'inc/common/nav.php'; ?>
 	            <div class="row">
-	                <form class="form-horizontal">
+	                <form class="form-horizontal" method="post" enctype="multipart/form-data" action="">
 	                    <div class="controls-row">
 	                        <div class="span6">
 	                            <div class="control-group">

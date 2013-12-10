@@ -6,6 +6,9 @@ if(strstr($_SERVER['HTTP_HOST'], 'luna')) {
 } else {
 	define("ROOT_FOLDER", "/var/www/html");
 	define('REDIRECT_URL_PATH', '/');
-	define('ORACLE_CONN_STRING', '//localhost');	
+	define('ORACLE_CONN_STRING', '//localhost');
 }
+
+define('SMSGW_USERNAME', 'username');
+define('SMSGW_PASSWORD', 'password');
 ?>
