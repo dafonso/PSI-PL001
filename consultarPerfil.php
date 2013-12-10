@@ -6,6 +6,12 @@ if(!$userLoggedIn) {
 	exit;
 }
 
+$customerUpdated = false;
+
+if(isset($_GET['customerUpdated']) && $_GET['customerUpdated'] == 1) {
+	$customerUpdated = true;
+}
+
 $customer = ShopCUL::getCustomerByID($_SESSION['user_id']);
 
 ?>
@@ -28,7 +34,10 @@ $customer = ShopCUL::getCustomerByID($_SESSION['user_id']);
 				  <li><a href="<?=REDIRECT_URL_PATH;?>">Home</a> <span class="divider">/</span></li>
 				  <li class="active">Dados Pessoais</li>
 				</ul>
-	            <div class="row">
+	            <?php if($customerUpdated == true) { ?>
+            	<div class="alert alert-success">Registo actualizado...</div>
+            	<?php } ?>
+				<div class="row">
 	                <form class="form-horizontal">
 	                    <div class="controls-row">
 	                        <div class="span6">

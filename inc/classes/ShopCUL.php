@@ -177,8 +177,8 @@ class ShopCUL {
 		$customerData['PHONENR'] = (isset($_POST['inputMovel']) ? $_POST['inputMovel'] : null);
 		$customerData['NAME'] = (isset($_POST['inputName']) ? $_POST['inputName'] : null);
 		$customerData['USERNAME'] = (isset($_POST['inputUsername']) ? $_POST['inputUsername'] : null);
-		$customerData['PASSWORD'] = (isset($_POST['inputPaypalEmail']) ? $_POST['inputPaypalEmail'] : null);
-		$customerData['PAYPAL'] = (isset($_POST['inputNewPassword']) ? $_POST['inputNewPassword'] : null);
+		$customerData['PASSWORD'] = (isset($_POST['inputNewPassword']) ? $_POST['inputNewPassword'] : null);
+		$customerData['PAYPAL'] = (isset($_POST['inputPaypalEmail']) ? $_POST['inputPaypalEmail'] : null);
 		
 		return $customerData;
 	}
@@ -307,6 +307,51 @@ class ShopCUL {
 		}
 		
 		return $customer;
+	}
+	
+	public function updateCustomer() {
+		global $db;
+		
+		$customer = self::getCustomerByID($_SESSION['user_id']);
+		
+		$updatedCustomer = new Customer(self::retrieveCustomerDataFromRequest());
+		$updatedCustomer->setUsername($customer->getUsername());
+
+		
+		if(!empty($_POST['inputNewPassword']) && $_POST['inputNewPassword'] == $_POST['inputConfirmPassword']) {
+			$updatedCustomer->setPassword(sha1($_POST['inputNewPassword']));			
+		} else {
+			$updatedCustomer->setPassword($customer->getPassword());
+		}
+		
+		$db->updateCustomer($updatedCustomer);
+		
+		$updatedAddress = new Address(self::retrieveAddressDataFromRequest());
+		$updatedAddress->setId($customer->getAddresses()->getId());
+		$updatedAddress->setCountry(new Country(1));
+		$updatedAddress->setType(new AddressType(1));
+	
+		if(is_null($updatedAddress->getId())) {
+			$address_id = $db->insertAddress($updatedAddress);
+			$updatedAddress->setId($address_id);
+			
+			$customer->setAddresses($updatedAddress);
+			
+			$customerAddress = new CustomerAddress(array('CUSTOMER_CUSTOMER_ID' => $customer->getId(), 'ADDRESS_ADDRESS_ID' => $updatedAddress->getId()));
+			$db->insertCustomerAddress($customerAddress);
+		} else {
+			$db->updateAddress($updatedAddress);
+		}
+		
+		$updatedPayOption = new PayOption(self::retrievePayOptionDataFromRequest());
+		$updatedPayOption->setCustomer($customer);
+		$updatedPayOption->setId($customer->getPayoption()->getId());
+		
+		if(is_null($updatedPayOption->getId())) {
+			$db->insertPayOption($updatedPayOption);
+		} else {
+			$db->updatePayOption($updatedPayOption);
+		}
 	}
 }
 ?>

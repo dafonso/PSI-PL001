@@ -139,7 +139,11 @@ class Customer {
 		
 		if(!($this->addresses instanceof Address)) {
 			$customerAddress = new CustomerAddress($db->getCustomerAddress($this));
-			$this->setAddresses($customerAddress->getAddress());
+			if($customerAddress->getAddress() instanceof Address) {
+				$this->setAddresses($customerAddress->getAddress());
+			} else {
+				$this->setAddresses(new Address());
+			}
 		}	
 					
 	    return  $this->addresses;

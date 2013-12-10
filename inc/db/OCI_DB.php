@@ -73,21 +73,17 @@ class OCI_DB {
 	
 	public function updateCustomer(Customer $customer) {
 		$updateCustomerSQL = "UPDATE CUSTOMER SET 
-						NAME = VALUES(:p_NAME),
-						PHONNR = VALUES(:p_PHONNR),
-						EMAIL = VALUES(:p_EMAIL),
-						PAYPAL = VALUES(:p_PAYPAL),
-						USERNAME = VALUES(:p_USERNAME),
-						PASSWORD = VALUES(:p_PASSWORD),
-						NIF = VALUES(:p_NIF) 
-						WHERE CUSTOMER_ID = :p_CUSTOMER_ID";
+								PHONENR = :p_PHONENR,
+								EMAIL = :p_EMAIL,
+								PAYPAL = :p_PAYPAL,
+								PASSWORD = :p_PASSWORD,
+								NIF = :p_NIF
+							WHERE CUSTOMER_ID = :p_CUSTOMER_ID";
 		$customerStmt = oci_parse($this->db, $updateCustomerSQL);
 		
-		oci_bind_by_name($customerStmt, ":p_NAME", $customer->getName());
-		oci_bind_by_name($customerStmt, ":p_PHONNR", $customer->getPhonenr());
+		oci_bind_by_name($customerStmt, ":p_PHONENR", $customer->getPhonenr());
 		oci_bind_by_name($customerStmt, ":p_EMAIL", $customer->getEmail());
 		oci_bind_by_name($customerStmt, ":p_PAYPAL", $customer->getPaypal());
-		oci_bind_by_name($customerStmt, ":p_USERNAME", $customer->getUsername());
 		oci_bind_by_name($customerStmt, ":p_PASSWORD", $customer->getPassword());
 		oci_bind_by_name($customerStmt, ":p_NIF", $customer->getNif());
 		oci_bind_by_name($customerStmt, ":p_CUSTOMER_ID", $customer->getId());
@@ -192,7 +188,24 @@ class OCI_DB {
 	}
 	
 	public function updateAddress(Address $address) {
+		$updateAddressSQL = "UPDATE ADDRESS SET
+								ADDRESSTYPE_ADDRESSTYPE_ID = :p_ADDRESSTYPE_ADDRESSTYPE_ID ,
+							    POSTALCODE                   = :p_POSTALCODE ,
+							    COUNTRY_COUNTRY_ID           = :p_COUNTRY_COUNTRY_ID ,
+							    CITY                         = :p_CITY ,
+							    STREET                       = :p_STREET
+							  WHERE ADDRESS_ID               = :p_ADDRESS_ID";
 		
+		$updateAddressStmt = oci_parse($this->db, $updateAddressSQL);
+		
+		oci_bind_by_name($updateAddressStmt, ':p_ADDRESSTYPE_ADDRESSTYPE_ID', $address->getType()->getId());
+		oci_bind_by_name($updateAddressStmt, ':p_POSTALCODE', $address->getPostalcode());
+		oci_bind_by_name($updateAddressStmt, ':p_COUNTRY_COUNTRY_ID', $address->getCountry()->getId());
+		oci_bind_by_name($updateAddressStmt, ':p_CITY', $address->getCity());
+		oci_bind_by_name($updateAddressStmt, ':p_STREET', $address->getStreet());
+		oci_bind_by_name($updateAddressStmt, ':p_ADDRESS_ID', $address->getId());
+		
+		return oci_execute($updateAddressStmt);
 	}
 	
 	public function deleteAddress(Address $address) {
@@ -255,7 +268,9 @@ class OCI_DB {
 		if(!oci_execute($customerAddressStmt))
 			return false;
 		
-		return oci_fetch_assoc($customerAddressStmt);
+		$result = oci_fetch_assoc($customerAddressStmt);
+		
+		return $result == false ? null : $result ;
 	}
 	
 	/**
@@ -300,7 +315,20 @@ class OCI_DB {
 	}
 	
 	public function updatePayOption(PayOption $payoption) {
-	
+		$payoptionUpdateSQL = "UPDATE PAYOPTION SET
+								CARDNR            	 = :p_CARDNR ,
+							    SECURITYCODE         = :p_SECURITYCODE ,
+							    EXPIRYDATE           = :p_EXPIRYDATE
+							  WHERE PAYOPTION_ID     = :p_PAYOPTION_ID";
+		
+		$payoptionUpdateStmt = oci_parse($this->db, $payoptionUpdateSQL);
+		
+		oci_bind_by_name($payoptionUpdateStmt, ':p_CARDNR', $payoption->getCardnr());
+		oci_bind_by_name($payoptionUpdateStmt, ':p_SECURITYCODE', $payoption->getSecuritycode());
+		oci_bind_by_name($payoptionUpdateStmt, ':p_EXPIRYDATE', $payoption->getExpirydate());
+		oci_bind_by_name($payoptionUpdateStmt, ':p_PAYOPTION_ID', $payoption->getId());
+		
+		return oci_execute($payoptionUpdateStmt);
 	}
 	
 	public function deletePayOption(PayOption $payoption) {

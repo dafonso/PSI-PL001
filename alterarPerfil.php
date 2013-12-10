@@ -6,6 +6,12 @@ if(!$userLoggedIn) {
 	exit;
 }
 
+if(isset($_POST['inputNIF'])) {
+	ShopCUL::updateCustomer();	
+	header('Location: '.REDIRECT_URL_PATH.'consultarPerfil.php?customerUpdated=1');
+	exit;
+}
+
 $customer = ShopCUL::getCustomerByID($_SESSION['user_id']);
 
 ?>
@@ -24,6 +30,11 @@ $customer = ShopCUL::getCustomerByID($_SESSION['user_id']);
 	        <div class="container">
 				<h1>ShopCUL - Alterar Dados Pessoais</h1>
 	            <?php require 'inc/common/nav.php'; ?>
+	            <ul class="breadcrumb">
+				  <li><a href="<?=REDIRECT_URL_PATH;?>">Home</a> <span class="divider">/</span></li>
+				  <li><a href="consultarPerfil.php">Dados Pessoais</a> <span class="divider">/</span></li>
+				  <li class="active">Alterar Dados Pessoais</li>
+				</ul>
 	            <div class="row">
 	                <form class="form-horizontal" method="post" enctype="multipart/form-data" action="">
 	                    <div class="controls-row">
@@ -37,13 +48,14 @@ $customer = ShopCUL::getCustomerByID($_SESSION['user_id']);
 	                            <div class="control-group">
 	                                <label class="control-label" for="inputAddress">Morada</label>
 	                                <div class="controls">
+	                                	<input type="hidden" name="inputAddressId" value="<?=$customer->getAddresses()->getId();?>">
 	                                    <input type="text" id="inputAddress" name="inputAddress"  placeholder="Morada" class="input-xlarge" maxlength="255" value="<?=$customer->getAddresses()->getStreet();?>">
 	                                </div>
 	                            </div>
 	                            <div class="control-group">
 	                                <label class="control-label" for="inputNIF">Nº Contribuinte</label>
 	                                <div class="controls">
-	                                    <input type="text" id="inputNIF" name="inputNIF"  placeholder="Nº Contribuinte" class="input-xlarge" value="<?=$customer->getNif();?>">
+	                                    <input type="text" id="inputNIF" name="inputNIF"  placeholder="Nº Contribuinte" class="input-xlarge" value="<?=$customer->getNif();?>" pattern="[1-9][0-9]{8}" maxlength="9">
 	                                </div>
 	                            </div>
 	                            <div class="control-group">
@@ -59,52 +71,60 @@ $customer = ShopCUL::getCustomerByID($_SESSION['user_id']);
 	                                <div class="control-group">
 	                                    <label class="control-label" for="inputCardNumber">Nº Cartão</label>
 	                                    <div class="controls">
-	                                        <input type="text" id="inputCardNumber" name="inputCardNumber"  placeholder="Nº Cartão" class="input-xlarge" maxlength="16">
+	                                    	<input type="hidden" name="inputPayoptionId" value="<?=$customer->getPayoption()->getId();?>">
+	                                        <input type="text" id="inputCardNumber" name="inputCardNumber"  placeholder="Nº Cartão" class="input-xlarge" maxlength="16" pattern="[0-9]{16}" value="<?=$customer->getPayoption()->getCardnr();?>">
+	                                    </div>
+	                                </div>
+	                                <div class="control-group">
+	                                    <label class="control-label" for="inputExpiryDate">Data de Expiração</label>
+	                                    <div class="controls">
+	                                        <input type="text" id="inputExpiryDate" name="inputExpiryDate"  placeholder="mm/aa" class="input-small" pattern="^(0[1-9]|1[1-2])/(1[3-9]|2[0-9])$" value="<?=$customer->getPayoption()->getExpirydate();?>">
 	                                    </div>
 	                                </div>
 	                                <div class="control-group">
 	                                    <label class="control-label" for="inputCS">Codigo de Segurança</label>
 	                                    <div class="controls">
-	                                        <input type="text" id="inputCS" name="inputCS"  placeholder="Codigo de Segurança" class="input-xlarge" maxlength="3">
+	                                        <input type="text" id="inputCS" name="inputCS"  placeholder="123" class="input-small" maxlength="3" pattern="[0-9]{3}" value="<?=$customer->getPayoption()->getSecuritycode();?>">
 	                                    </div>
 	                                </div>
 	                            </div>
-	                            <div class="control-group span6 offset2" id="paypalDetails" style="display: none;"> 
-	                                <!-- Display the payment button. -->  
-	                                <input type="image" name="submit" src="img/btn_subscribe_LG.gif"  
-	                                       alt="PayPal - The safer, easier way to pay online">
-	                            </div> 
+	                            <div class="control-group" id="paypalDetails" style="display: none;"> 
+	                                <label class="control-label" for="inputPaypalEmail">E-mail PayPal</label>
+                                    <div class="controls">
+                                        <input type="email" id="inputPaypalEmail" name="inputPaypalEmail"  placeholder="E-mail PayPal" class="input-xlarge" maxlength="255">
+                                    </div>
+	                            </div>
 	                        </div>
 	                        <div class="span6">
 	                            <div class="control-group">
 	                                <label class="control-label" for="inputConfirmPassword">Confirmar password</label>
 	                                <div class="controls">
-	                                    <input type="password" id="inputConfirmPassword" placeholder="Confirmar password" class="input-xlarge" maxlength="40">
+	                                    <input type="password" id="inputConfirmPassword" name="inputConfirmPassword" placeholder="Confirmar password" class="input-xlarge" maxlength="40">
 	                                </div>
 	                            </div>
 	                            <div class="control-group">
 	                                <label class="control-label">Nome</label>                                
 	                                <div class="controls">                                    
-	                                    <label id="inputName" class="control-label" style="text-align: left;">Maria Silva</label>
+	                                    <label id="inputName" class="control-label" style="text-align: left;"><?=$customer->getName();?></label>
 	                                </div>
 	                            </div>
 	                            <div class="control-group">
 	                                <label class="control-label" for="inputZipcode1">Código Postal</label>
 	                                <div class="controls controls-row">
-	                                    <input type="text" id="inputZipcode1" name="inputZipcode1"  placeholder="Código" class="input-small" maxlength="12">
-	                                    <input type="text" id="inputZipcode2" name="inputZipcode2"  placeholder="Localidade" class="input-medium pull-right" maxlength="60">
+	                                    <input type="text" id="inputZipcode1" name="inputZipcode1"  placeholder="Código" class="input-small"  maxlength="8" pattern="^(\d{4}|\d{4}-\d{3})$" value="<?=$customer->getAddresses()->getPostalcode();?>">
+	                                    <input type="text" id="inputCity" name="inputCity"  placeholder="Localidade" class="input-medium pull-right" maxlength="60" value="<?=$customer->getAddresses()->getCity();?>">
 	                                </div>
 	                            </div>
 	                            <div class="control-group">
 	                                <label class="control-label" for="inputMovel">Telemovel</label>
 	                                <div class="controls">
-	                                    <input type="text" id="inputMovel" name="inputMovel"  placeholder="Telemovel" class="input-xlarge" pattern="9(1|2|3|6)\d{7}" maxlength="16">
+	                                    <input type="text" id="inputMovel" name="inputMovel"  placeholder="Telemovel" class="input-xlarge" pattern="9(1|2|3|6)\d{7}" maxlength="16" value="<?=$customer->getPhonenr();?>">
 	                                </div>
 	                            </div>
 	                            <div class="control-group">
 	                                <label class="control-label" for="inputEmail">Email</label>
 	                                <div class="controls">
-	                                    <input type="email" id="inputEmail" placeholder="Email" class="input-xlarge" maxlength="255">
+	                                    <input type="email" id="inputEmail" name="inputEmail" placeholder="Email" class="input-xlarge" maxlength="255" value="<?=$customer->getEmail();?>">
 	                                </div>
 	                            </div>
 	                            <div class="control-group">                               
@@ -131,7 +151,7 @@ $customer = ShopCUL::getCustomerByID($_SESSION['user_id']);
 	                        <div class="control-group span12">
 	                            <div class="controls">
 	                                <button type="submit" class="btn btn-primary">Confirmar</button>
-	                                <button class="btn btn-danger">Cancelar</button>
+	                                <a href="consultarPerfil.php" class="btn btn-danger">Cancelar</a>
 	                            </div>
 	                        </div>
 	                    </div>

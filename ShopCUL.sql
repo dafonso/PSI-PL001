@@ -151,7 +151,10 @@ DROP SEQUENCE "PSI001PL"."USERTYPE_USERTYPE_ID_SEQ";
 	"NAME" VARCHAR2(160 BYTE), 
 	"NIF" NUMBER(*,0), 
 	"PHONENR" VARCHAR2(16 BYTE), 
-	"PAYPAL" VARCHAR2(255 BYTE)
+	"PAYPAL" VARCHAR2(255 BYTE),
+	"ALERTSMS" NUMBER DEFAULT 0, 
+	"ALERTEMAIL" NUMBER DEFAULT 0, 
+	"ALERTNUMDAYS" NUMBER DEFAULT 1
    ) SEGMENT CREATION IMMEDIATE 
   PCTFREE 10 PCTUSED 40 INITRANS 1 MAXTRANS 255 NOCOMPRESS LOGGING
   STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
@@ -278,18 +281,18 @@ REM INSERTING into PSI001PL.ADDRESS
 SET DEFINE OFF;
 Insert into PSI001PL.ADDRESS (ADDRESS_ID,STREET,CITY,POSTALCODE,COUNTRY_COUNTRY_ID,ADDRESSTYPE_ADDRESSTYPE_ID) values (1,'Rua do Norte 35 3E','Lisboa','1000-100',1,1);
 Insert into PSI001PL.ADDRESS (ADDRESS_ID,STREET,CITY,POSTALCODE,COUNTRY_COUNTRY_ID,ADDRESSTYPE_ADDRESSTYPE_ID) values (2,'Avenida da Boavista 16 1D','Porto','4000-100',1,1);
-Insert into PSI001PL.ADDRESS (ADDRESS_ID,STREET,CITY,POSTALCODE,COUNTRY_COUNTRY_ID,ADDRESSTYPE_ADDRESSTYPE_ID) values (3,'Rua Luís de Camões 2 2D','Coimbra','3000-100',1,1);
-Insert into PSI001PL.ADDRESS (ADDRESS_ID,STREET,CITY,POSTALCODE,COUNTRY_COUNTRY_ID,ADDRESSTYPE_ADDRESSTYPE_ID) values (4,'Rua Bela de São Tiago 47','Funchal','9000-100',1,1);
+Insert into PSI001PL.ADDRESS (ADDRESS_ID,STREET,CITY,POSTALCODE,COUNTRY_COUNTRY_ID,ADDRESSTYPE_ADDRESSTYPE_ID) values (3,'Rua Luï¿½s de Camï¿½es 2 2D','Coimbra','3000-100',1,1);
+Insert into PSI001PL.ADDRESS (ADDRESS_ID,STREET,CITY,POSTALCODE,COUNTRY_COUNTRY_ID,ADDRESSTYPE_ADDRESSTYPE_ID) values (4,'Rua Bela de Sï¿½o Tiago 47','Funchal','9000-100',1,1);
 Insert into PSI001PL.ADDRESS (ADDRESS_ID,STREET,CITY,POSTALCODE,COUNTRY_COUNTRY_ID,ADDRESSTYPE_ADDRESSTYPE_ID) values (5,'Rua da Junqueira 247','Lisboa','1600-100',1,1);
 REM INSERTING into PSI001PL.ADDRESSTYPE
 SET DEFINE OFF;
 Insert into PSI001PL.ADDRESSTYPE (ADDRESSTYPE_ID,NAME) values (1,'Entrega');
-Insert into PSI001PL.ADDRESSTYPE (ADDRESSTYPE_ID,NAME) values (2,'Faturação');
+Insert into PSI001PL.ADDRESSTYPE (ADDRESSTYPE_ID,NAME) values (2,'Faturaï¿½ï¿½o');
 REM INSERTING into PSI001PL.CATEGORY
 SET DEFINE OFF;
 Insert into PSI001PL.CATEGORY (CATEGORY_ID,NAME,IMAGESOURCE) values (1,'Artesanato','http://www.infoescola.com/wp-content/uploads/2009/12/artesanato2.JPG');
 Insert into PSI001PL.CATEGORY (CATEGORY_ID,NAME,IMAGESOURCE) values (2,'Confeitaria','http://estrelapadaria.com/ESW/Images/confeitaria.jpg');
-Insert into PSI001PL.CATEGORY (CATEGORY_ID,NAME,IMAGESOURCE) values (3,'Espetáculo','http://2.bp.blogspot.com/_gzp2oQw42zs/TCiwGE5z3qI/AAAAAAAABg8/JIygCPCktMU/s1600/O+grupo+Soarte+de+teatro+encerra+o+Festival+de+M%C3%BAsica+com+o+espet%C3%A1culo+Noel,+o+Feiti%C3%A7o+da+Vila.+%C3%89+dia+25+de+julho+no+Teatro..JPG');
+Insert into PSI001PL.CATEGORY (CATEGORY_ID,NAME,IMAGESOURCE) values (3,'Espetï¿½culo','http://2.bp.blogspot.com/_gzp2oQw42zs/TCiwGE5z3qI/AAAAAAAABg8/JIygCPCktMU/s1600/O+grupo+Soarte+de+teatro+encerra+o+Festival+de+M%C3%BAsica+com+o+espet%C3%A1culo+Noel,+o+Feiti%C3%A7o+da+Vila.+%C3%89+dia+25+de+julho+no+Teatro..JPG');
 REM INSERTING into PSI001PL.COUNTRY
 SET DEFINE OFF;
 Insert into PSI001PL.COUNTRY (COUNTRY_ID,NAME) values (1,'Portugal');
@@ -297,7 +300,7 @@ Insert into PSI001PL.COUNTRY (COUNTRY_ID,NAME) values (2,'Espanha');
 REM INSERTING into PSI001PL.CUSTOMER
 SET DEFINE OFF;
 Insert into PSI001PL.CUSTOMER (CUSTOMER_ID,EMAIL,USERNAME,PASSWORD,NAME,NIF,PHONENR,PAYPAL) values (1,'maria@mail.pt','maria','99efd3054ce4aeb093d7864ac6e0e29ccb6fa4a9','Maria Silva',200000001,'913772301',null);
-Insert into PSI001PL.CUSTOMER (CUSTOMER_ID,EMAIL,USERNAME,PASSWORD,NAME,NIF,PHONENR,PAYPAL) values (2,'joao@mail.pt','joao','99efd3054ce4aeb093d7864ac6e0e29ccb6fa4a9','João Sousa',200000002,'934573747','joao@mail.pt');
+Insert into PSI001PL.CUSTOMER (CUSTOMER_ID,EMAIL,USERNAME,PASSWORD,NAME,NIF,PHONENR,PAYPAL) values (2,'joao@mail.pt','joao','99efd3054ce4aeb093d7864ac6e0e29ccb6fa4a9','Joï¿½o Sousa',200000002,'934573747','joao@mail.pt');
 Insert into PSI001PL.CUSTOMER (CUSTOMER_ID,EMAIL,USERNAME,PASSWORD,NAME,NIF,PHONENR,PAYPAL) values (3,'manuel@mail.pt','manuel','99efd3054ce4aeb093d7864ac6e0e29ccb6fa4a9','Manuel Ribeiro',200000003,'924752103','manuel@mail.pt');
 Insert into PSI001PL.CUSTOMER (CUSTOMER_ID,EMAIL,USERNAME,PASSWORD,NAME,NIF,PHONENR,PAYPAL) values (4,'carla@mail.pt','carla','99efd3054ce4aeb093d7864ac6e0e29ccb6fa4a9','Carla Rodrigues',200000004,'961438901','carla@mail.pt');
 Insert into PSI001PL.CUSTOMER (CUSTOMER_ID,EMAIL,USERNAME,PASSWORD,NAME,NIF,PHONENR,PAYPAL) values (5,'cajo@mail.pt','carlinhos','99efd3054ce4aeb093d7864ac6e0e29ccb6fa4a9','Carlos Jorge',200000005,'965443324',null);
@@ -328,26 +331,26 @@ Insert into PSI001PL.IMAGE (IMAGE_ID,SOURCE,PRODUCT_PRODUCT_ID) values (15,'http
 REM INSERTING into PSI001PL.PAYOPTION
 SET DEFINE OFF;
 Insert into PSI001PL.PAYOPTION (PAYOPTION_ID,NAME,CARDNR,EXPIRYDATE,SECURITYCODE,CUSTOMER_CUSTOMER_ID) values (1,'Maria Silva','0038001238012735','2014 ','102',1);
-Insert into PSI001PL.PAYOPTION (PAYOPTION_ID,NAME,CARDNR,EXPIRYDATE,SECURITYCODE,CUSTOMER_CUSTOMER_ID) values (2,'João Sousa','0056722346640012','2014 ','709',2);
+Insert into PSI001PL.PAYOPTION (PAYOPTION_ID,NAME,CARDNR,EXPIRYDATE,SECURITYCODE,CUSTOMER_CUSTOMER_ID) values (2,'Joï¿½o Sousa','0056722346640012','2014 ','709',2);
 Insert into PSI001PL.PAYOPTION (PAYOPTION_ID,NAME,CARDNR,EXPIRYDATE,SECURITYCODE,CUSTOMER_CUSTOMER_ID) values (3,'Manuel Ribeiro','0049034883487347','2015 ','098',3);
 Insert into PSI001PL.PAYOPTION (PAYOPTION_ID,NAME,CARDNR,EXPIRYDATE,SECURITYCODE,CUSTOMER_CUSTOMER_ID) values (4,'Carla Rodrigues','0433051224454767','2014 ','654',4);
 REM INSERTING into PSI001PL.PRODUCT
 SET DEFINE OFF;
-Insert into PSI001PL.PRODUCT (PRODUCT_ID,NAME,DESCRIPTION,CODE,BUYPRICE,SELLPRICE,SHOWDATE,STARTTIME,ENDTIME,CATEGORY_CATEGORY_ID) values (1,'Galo de Barcelos','Artesanato minhoto, geralmente de barro, é um símbolo de Portugal e foi adotado pelo Gil Vicente como sua mascote.','A000000001',1.5,3.99,null,null,null,1);
-Insert into PSI001PL.PRODUCT (PRODUCT_ID,NAME,DESCRIPTION,CODE,BUYPRICE,SELLPRICE,SHOWDATE,STARTTIME,ENDTIME,CATEGORY_CATEGORY_ID) values (2,'Zé Povinho','Figura marcante da caricatura de Bordalo Pinheiro.','A000000002',1.2,3.49,null,null,null,1);
+Insert into PSI001PL.PRODUCT (PRODUCT_ID,NAME,DESCRIPTION,CODE,BUYPRICE,SELLPRICE,SHOWDATE,STARTTIME,ENDTIME,CATEGORY_CATEGORY_ID) values (1,'Galo de Barcelos','Artesanato minhoto, geralmente de barro, ï¿½ um sï¿½mbolo de Portugal e foi adotado pelo Gil Vicente como sua mascote.','A000000001',1.5,3.99,null,null,null,1);
+Insert into PSI001PL.PRODUCT (PRODUCT_ID,NAME,DESCRIPTION,CODE,BUYPRICE,SELLPRICE,SHOWDATE,STARTTIME,ENDTIME,CATEGORY_CATEGORY_ID) values (2,'Zï¿½ Povinho','Figura marcante da caricatura de Bordalo Pinheiro.','A000000002',1.2,3.49,null,null,null,1);
 Insert into PSI001PL.PRODUCT (PRODUCT_ID,NAME,DESCRIPTION,CODE,BUYPRICE,SELLPRICE,SHOWDATE,STARTTIME,ENDTIME,CATEGORY_CATEGORY_ID) values (3,'Ovos Moles','Doce regional, tradicional da pastelaria aveirense.','C000000001',5.5,8.2,null,null,null,2);
-Insert into PSI001PL.PRODUCT (PRODUCT_ID,NAME,DESCRIPTION,CODE,BUYPRICE,SELLPRICE,SHOWDATE,STARTTIME,ENDTIME,CATEGORY_CATEGORY_ID) values (4,'Pastéis de Belém','Os pastéis de nata são uma das mais populares especialidades da doçaria portuguesa.','C000000002',5.9,9.1,null,null,null,2);
-Insert into PSI001PL.PRODUCT (PRODUCT_ID,NAME,DESCRIPTION,CODE,BUYPRICE,SELLPRICE,SHOWDATE,STARTTIME,ENDTIME,CATEGORY_CATEGORY_ID) values (5,'Festival do Panda','Depois do enorme sucesso das edições anteriores, o Festival Panda está de volta.','E000000001',10,11,to_date('12-DEC-13','DD-MON-RR'),'16:00','18:00',3);
-Insert into PSI001PL.PRODUCT (PRODUCT_ID,NAME,DESCRIPTION,CODE,BUYPRICE,SELLPRICE,SHOWDATE,STARTTIME,ENDTIME,CATEGORY_CATEGORY_ID) values (6,'Festival no Gelo','Este Natal os Clássicos da Disney vão estra no Campo Pequeno, entre 25 de Dezembro e 6 de Janeiro.','E000000002',15,16,to_date('28-DEC-13','DD-MON-RR'),'15:00','18:00',3);
-Insert into PSI001PL.PRODUCT (PRODUCT_ID,NAME,DESCRIPTION,CODE,BUYPRICE,SELLPRICE,SHOWDATE,STARTTIME,ENDTIME,CATEGORY_CATEGORY_ID) values (7,'Azulejos variados','Azulejos em terracota, fabricados manualmente e pintados à mão com motivos tradicionais portugueses.','A000000003',4,7.99,null,null,null,1);
+Insert into PSI001PL.PRODUCT (PRODUCT_ID,NAME,DESCRIPTION,CODE,BUYPRICE,SELLPRICE,SHOWDATE,STARTTIME,ENDTIME,CATEGORY_CATEGORY_ID) values (4,'Pastï¿½is de Belï¿½m','Os pastï¿½is de nata sï¿½o uma das mais populares especialidades da doï¿½aria portuguesa.','C000000002',5.9,9.1,null,null,null,2);
+Insert into PSI001PL.PRODUCT (PRODUCT_ID,NAME,DESCRIPTION,CODE,BUYPRICE,SELLPRICE,SHOWDATE,STARTTIME,ENDTIME,CATEGORY_CATEGORY_ID) values (5,'Festival do Panda','Depois do enorme sucesso das ediï¿½ï¿½es anteriores, o Festival Panda estï¿½ de volta.','E000000001',10,11,to_date('12-DEC-13','DD-MON-RR'),'16:00','18:00',3);
+Insert into PSI001PL.PRODUCT (PRODUCT_ID,NAME,DESCRIPTION,CODE,BUYPRICE,SELLPRICE,SHOWDATE,STARTTIME,ENDTIME,CATEGORY_CATEGORY_ID) values (6,'Festival no Gelo','Este Natal os Clï¿½ssicos da Disney vï¿½o estra no Campo Pequeno, entre 25 de Dezembro e 6 de Janeiro.','E000000002',15,16,to_date('28-DEC-13','DD-MON-RR'),'15:00','18:00',3);
+Insert into PSI001PL.PRODUCT (PRODUCT_ID,NAME,DESCRIPTION,CODE,BUYPRICE,SELLPRICE,SHOWDATE,STARTTIME,ENDTIME,CATEGORY_CATEGORY_ID) values (7,'Azulejos variados','Azulejos em terracota, fabricados manualmente e pintados ï¿½ mï¿½o com motivos tradicionais portugueses.','A000000003',4,7.99,null,null,null,1);
 Insert into PSI001PL.PRODUCT (PRODUCT_ID,NAME,DESCRIPTION,CODE,BUYPRICE,SELLPRICE,SHOWDATE,STARTTIME,ENDTIME,CATEGORY_CATEGORY_ID) values (8,'Alcofa de Palha','Alcofa fabricada manualmente com  folha de palma.','A000000004',7,17.99,null,null,null,1);
-Insert into PSI001PL.PRODUCT (PRODUCT_ID,NAME,DESCRIPTION,CODE,BUYPRICE,SELLPRICE,SHOWDATE,STARTTIME,ENDTIME,CATEGORY_CATEGORY_ID) values (9,'Lenço Tabaqueiro','O lenço “tipo” TABAQUEIRO também conhecido por “O Alcobaça” é um lenço   de algodão, de forma quadrangular , com fundo vermelho, azul ou amarelo, com barras em cores diversas duplas ou simples, fabricado em Alcobaça.','A000000005',2,5.99,null,null,null,1);
-Insert into PSI001PL.PRODUCT (PRODUCT_ID,NAME,DESCRIPTION,CODE,BUYPRICE,SELLPRICE,SHOWDATE,STARTTIME,ENDTIME,CATEGORY_CATEGORY_ID) values (10,'Pinhoada','A pinhoada é um doce muito comum nas feiras, sendo confecionado à base de pinhões e mel ou açúcar.','C000000003',2,3,null,null,null,2);
-Insert into PSI001PL.PRODUCT (PRODUCT_ID,NAME,DESCRIPTION,CODE,BUYPRICE,SELLPRICE,SHOWDATE,STARTTIME,ENDTIME,CATEGORY_CATEGORY_ID) values (11,'Bolinhol','O “Bolinhol”, é a mais famosa especialidade gastronómica de Vizela. É um doce único em Portugal, apresenta uma forma rectangular com uma suave cobertura de açúcar. A sua massa é levemente húmida o que lhe atribui um sabor inigualável.','C000000004',8,15.99,null,null,null,2);
-Insert into PSI001PL.PRODUCT (PRODUCT_ID,NAME,DESCRIPTION,CODE,BUYPRICE,SELLPRICE,SHOWDATE,STARTTIME,ENDTIME,CATEGORY_CATEGORY_ID) values (12,'Doces Brancos','Doces Brancos de Páscoa de Viana do Castelo','C000000005',1,2,null,null,null,2);
-Insert into PSI001PL.PRODUCT (PRODUCT_ID,NAME,DESCRIPTION,CODE,BUYPRICE,SELLPRICE,SHOWDATE,STARTTIME,ENDTIME,CATEGORY_CATEGORY_ID) values (13,'Anselmo Ralph','Concerto no Campo Pequeno - 7 de janeiro 2013. Anselmo Ralph, o cantor angolano com maior sucesso na Europa, fecha o ano de 2013 apresentando o seu novo álbum “A Dor do Cupido”.','E000000003',10,20,to_date('07-DEC-13','DD-MON-RR'),'21:30','23:00',3);
-Insert into PSI001PL.PRODUCT (PRODUCT_ID,NAME,DESCRIPTION,CODE,BUYPRICE,SELLPRICE,SHOWDATE,STARTTIME,ENDTIME,CATEGORY_CATEGORY_ID) values (14,'Backstreet Boys','Passará por 27 cidades e irá arrancar em Lisboa no próximo dia 18 de Fevereiro. O oitavo disco de estúdio do grupo, “In a World Like This”, será apresentado pela primeira vez em Portugal.','E000000004',12,40,to_date('18-DEC-13','DD-MON-RR'),'21:30','22:30',3);
-Insert into PSI001PL.PRODUCT (PRODUCT_ID,NAME,DESCRIPTION,CODE,BUYPRICE,SELLPRICE,SHOWDATE,STARTTIME,ENDTIME,CATEGORY_CATEGORY_ID) values (15,'Cirque du Soleil','Fusão entre a tradição chinesa das artes acrobáticas, com a abordagem multidisciplinar do Cirque du Soleil, Dralion vai buscar a inspiração à filosofia oriental e a sua demanda incessante pela harmonia entre os humanos e a natureza.','E000000005',20,65,to_date('18-DEC-13','DD-MON-RR'),'21:30','22:30',3);
+Insert into PSI001PL.PRODUCT (PRODUCT_ID,NAME,DESCRIPTION,CODE,BUYPRICE,SELLPRICE,SHOWDATE,STARTTIME,ENDTIME,CATEGORY_CATEGORY_ID) values (9,'Lenï¿½o Tabaqueiro','O lenï¿½o ï¿½tipoï¿½ TABAQUEIRO tambï¿½m conhecido por ï¿½O Alcobaï¿½aï¿½ ï¿½ um lenï¿½o   de algodï¿½o, de forma quadrangular , com fundo vermelho, azul ou amarelo, com barras em cores diversas duplas ou simples, fabricado em Alcobaï¿½a.','A000000005',2,5.99,null,null,null,1);
+Insert into PSI001PL.PRODUCT (PRODUCT_ID,NAME,DESCRIPTION,CODE,BUYPRICE,SELLPRICE,SHOWDATE,STARTTIME,ENDTIME,CATEGORY_CATEGORY_ID) values (10,'Pinhoada','A pinhoada ï¿½ um doce muito comum nas feiras, sendo confecionado ï¿½ base de pinhï¿½es e mel ou aï¿½ï¿½car.','C000000003',2,3,null,null,null,2);
+Insert into PSI001PL.PRODUCT (PRODUCT_ID,NAME,DESCRIPTION,CODE,BUYPRICE,SELLPRICE,SHOWDATE,STARTTIME,ENDTIME,CATEGORY_CATEGORY_ID) values (11,'Bolinhol','O ï¿½Bolinholï¿½, ï¿½ a mais famosa especialidade gastronï¿½mica de Vizela. ï¿½ um doce ï¿½nico em Portugal, apresenta uma forma rectangular com uma suave cobertura de aï¿½ï¿½car. A sua massa ï¿½ levemente hï¿½mida o que lhe atribui um sabor inigualï¿½vel.','C000000004',8,15.99,null,null,null,2);
+Insert into PSI001PL.PRODUCT (PRODUCT_ID,NAME,DESCRIPTION,CODE,BUYPRICE,SELLPRICE,SHOWDATE,STARTTIME,ENDTIME,CATEGORY_CATEGORY_ID) values (12,'Doces Brancos','Doces Brancos de Pï¿½scoa de Viana do Castelo','C000000005',1,2,null,null,null,2);
+Insert into PSI001PL.PRODUCT (PRODUCT_ID,NAME,DESCRIPTION,CODE,BUYPRICE,SELLPRICE,SHOWDATE,STARTTIME,ENDTIME,CATEGORY_CATEGORY_ID) values (13,'Anselmo Ralph','Concerto no Campo Pequeno - 7 de janeiro 2013. Anselmo Ralph, o cantor angolano com maior sucesso na Europa, fecha o ano de 2013 apresentando o seu novo ï¿½lbum ï¿½A Dor do Cupidoï¿½.','E000000003',10,20,to_date('07-DEC-13','DD-MON-RR'),'21:30','23:00',3);
+Insert into PSI001PL.PRODUCT (PRODUCT_ID,NAME,DESCRIPTION,CODE,BUYPRICE,SELLPRICE,SHOWDATE,STARTTIME,ENDTIME,CATEGORY_CATEGORY_ID) values (14,'Backstreet Boys','Passarï¿½ por 27 cidades e irï¿½ arrancar em Lisboa no prï¿½ximo dia 18 de Fevereiro. O oitavo disco de estï¿½dio do grupo, ï¿½In a World Like Thisï¿½, serï¿½ apresentado pela primeira vez em Portugal.','E000000004',12,40,to_date('18-DEC-13','DD-MON-RR'),'21:30','22:30',3);
+Insert into PSI001PL.PRODUCT (PRODUCT_ID,NAME,DESCRIPTION,CODE,BUYPRICE,SELLPRICE,SHOWDATE,STARTTIME,ENDTIME,CATEGORY_CATEGORY_ID) values (15,'Cirque du Soleil','Fusï¿½o entre a tradiï¿½ï¿½o chinesa das artes acrobï¿½ticas, com a abordagem multidisciplinar do Cirque du Soleil, Dralion vai buscar a inspiraï¿½ï¿½o ï¿½ filosofia oriental e a sua demanda incessante pela harmonia entre os humanos e a natureza.','E000000005',20,65,to_date('18-DEC-13','DD-MON-RR'),'21:30','22:30',3);
 REM INSERTING into PSI001PL.SYSTEMUSER
 SET DEFINE OFF;
 Insert into PSI001PL.SYSTEMUSER (SYSTEMUSER_ID,NAME,USERNAME,PASSWORD,EMAIL,USERTYPE_USERTYPE_ID) values (1,'Joaquim Costa','jcosta','99efd3054ce4aeb093d7864ac6e0e29ccb6fa4a9','jcosta@shopcul.pt',1);

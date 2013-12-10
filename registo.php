@@ -32,6 +32,9 @@ if(isset($_POST['inputUsername'])) {
 				  <li><a href="<?=REDIRECT_URL_PATH;?>">Home</a> <span class="divider">/</span></li>
 				  <li class="active">Registo de Cliente</li>
 				</ul>
+            	<?php if($userRegistered == true) { ?>
+            	<div class="alert alert-success">Utilizador Registado</div>
+            	<?php } ?>				
 	            <div class="row">
 	                <form id="teste" class="form-horizontal" method="post" action="<?=$_SERVER['PHP_SELF'];?>">
 	                    <div class="controls-row">
@@ -51,7 +54,7 @@ if(isset($_POST['inputUsername'])) {
 	                            <div class="control-group">
 	                                <label class="control-label" for="inputNIF">Nº Contribuinte</label>
 	                                <div class="controls">
-	                                    <input type="text" id="inputNIF" name="inputNIF"  placeholder="Nº Contribuinte" class="input-xlarge" pattern="[0-9]{9}" maxlength="9">
+	                                    <input type="text" id="inputNIF" name="inputNIF"  placeholder="Nº Contribuinte" class="input-xlarge" pattern="[1-9][0-9]{8}" maxlength="9">
 	                                </div>
 	                            </div>
 	                            <div class="control-group">
@@ -84,11 +87,10 @@ if(isset($_POST['inputUsername'])) {
 	                                </div>
 	                            </div>
 	                            <div class="control-group" id="paypalDetails" style="display: none;"> 
-	                                <!-- Display the payment button. -->  
 	                                <label class="control-label" for="inputPaypalEmail">E-mail PayPal</label>
-	                                    <div class="controls">
-	                                        <input type="text" id="inputPaypalEmail" name="inputPaypalEmail"  placeholder="E-mail PayPal" class="input-xlarge" maxlength="255">
-	                                    </div>
+                                    <div class="controls">
+                                        <input type="email" id="inputPaypalEmail" name="inputPaypalEmail"  placeholder="E-mail PayPal" class="input-xlarge" maxlength="255">
+                                    </div>
 	                            </div> 
 	                        </div>
 	                        <div class="span6">
@@ -142,7 +144,6 @@ if(isset($_POST['inputUsername'])) {
 	                            <div class="controls">
 	                                <button type="submit" class="btn btn-primary">Confirmar</button>
 	                                <button class="btn btn-danger">Cancelar</button>
-	                                <?=($userRegistered == true ? 'Utilizador Registado' : '');?>
 	                            </div>
 	                        </div>
 	                    </div>

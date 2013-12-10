@@ -81,7 +81,7 @@ class PayOption {
 	}
 	
 	public function getHiddenCardnr() {
-		return 'xxxx xxxx xxxx x'.substr($this->cardnr, -3);
+		return empty($this->cardnr) ? '' : 'xxxx xxxx xxxx x'.substr($this->cardnr, -3);
 	}
 
 	/**
